@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 
 import dk.kea.si.movies.domain.Movie;
 import dk.kea.si.movies.domain.MovieSearchResults;
+import dk.kea.si.movies.gateways.GoogleGateway;
 import dk.kea.si.movies.gateways.RottenTomatoesGateway;
 
 public class MovieCommand extends FrontCommand {
@@ -16,6 +17,7 @@ public class MovieCommand extends FrontCommand {
 		Movie movie = RottenTomatoesGateway.findMovie(
 				rottenTomatoesApiKey, id);
 		request.setAttribute("movie", movie);
+		Object googleVideos = GoogleGateway.findVideos(googleApiKey, movie.getTitle() + " trailer");
 		forward("/movie.jsp");
 	}
 

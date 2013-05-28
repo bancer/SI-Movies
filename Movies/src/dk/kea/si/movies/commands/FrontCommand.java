@@ -18,6 +18,8 @@ public abstract class FrontCommand {
 	protected HttpServletResponse response;
 
 	protected String rottenTomatoesApiKey;
+
+	protected String googleApiKey;
 	
 	public abstract void process() throws ServletException, IOException;
 	
@@ -30,6 +32,8 @@ public abstract class FrontCommand {
 		this.response = response;
 		this.rottenTomatoesApiKey = request.getSession().getServletContext()
 				.getInitParameter("rottentomatoes-api-key");
+		this.googleApiKey = request.getSession().getServletContext()
+				.getInitParameter("google-api-key");
 	}
 	
 	protected void forward(String target) throws ServletException, IOException {
