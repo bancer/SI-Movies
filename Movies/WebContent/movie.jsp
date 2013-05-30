@@ -76,6 +76,11 @@
 				</div>
 				<% } %>
 			</div>
+			
+			<div>
+				<h4>Wikipedia:</h4>
+				<%=request.getAttribute("wikiPage")%>
+			</div>
 		</div>
 
 		<%@ include file="inc/footer.jsp"%>

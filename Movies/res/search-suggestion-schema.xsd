@@ -1,0 +1,129 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    attributeFormDefault="unqualified"
+    elementFormDefault="qualified"
+    targetNamespace="http://opensearch.org/searchsuggest2" >
+
+    <xs:import
+        namespace="http://www.w3.org/XML/1998/namespace"
+        schemaLocation="http://www.w3.org/2001/xml.xsd" />
+
+    <xs:element name="SearchSuggestion" >
+
+        <xs:complexType>
+
+            <xs:sequence>
+
+                <xs:element name="Query" >
+
+                    <xs:complexType>
+
+                        <xs:simpleContent>
+
+                            <xs:extension base="xs:string" >
+
+                                <xs:attribute ref="xml:space" />
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="Section" >
+
+                    <xs:complexType>
+
+                        <xs:sequence>
+
+                            <xs:element
+                                name="Item"
+                                maxOccurs="unbounded"
+                                minOccurs="0" >
+
+                                <xs:complexType>
+
+                                    <xs:sequence>
+
+                                        <xs:element
+                                            name="Image"
+                                            minOccurs="0" >
+
+                                            <xs:complexType>
+
+                                                <xs:simpleContent>
+
+                                                    <xs:extension base="xs:string" >
+
+                                                        <xs:attribute
+                                                            name="source"
+                                                            type="xs:anyURI"
+                                                            use="optional" />
+
+                                                        <xs:attribute
+                                                            name="width"
+                                                            type="xs:byte"
+                                                            use="optional" />
+
+                                                        <xs:attribute
+                                                            name="height"
+                                                            type="xs:byte"
+                                                            use="optional" />
+                                                    </xs:extension>
+                                                </xs:simpleContent>
+                                            </xs:complexType>
+                                        </xs:element>
+
+                                        <xs:element name="Text" >
+
+                                            <xs:complexType>
+
+                                                <xs:simpleContent>
+
+                                                    <xs:extension base="xs:string" >
+
+                                                        <xs:attribute ref="xml:space" />
+                                                    </xs:extension>
+                                                </xs:simpleContent>
+                                            </xs:complexType>
+                                        </xs:element>
+
+                                        <xs:element name="Description" >
+
+                                            <xs:complexType>
+
+                                                <xs:simpleContent>
+
+                                                    <xs:extension base="xs:string" >
+
+                                                        <xs:attribute ref="xml:space" />
+                                                    </xs:extension>
+                                                </xs:simpleContent>
+                                            </xs:complexType>
+                                        </xs:element>
+
+                                        <xs:element name="Url" >
+
+                                            <xs:complexType>
+
+                                                <xs:simpleContent>
+
+                                                    <xs:extension base="xs:anyURI" >
+
+                                                        <xs:attribute ref="xml:space" />
+                                                    </xs:extension>
+                                                </xs:simpleContent>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+
+            <xs:attribute
+                name="version"
+                type="xs:float" />
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
