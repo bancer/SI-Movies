@@ -18,7 +18,7 @@ public class SearchMoviesCommand  extends FrontCommand {
 		MovieSearchResults results = RottenTomatoesGateway.searchMovies(
 				rottenTomatoesApiKey, search, page);
 		request.setAttribute("results", results);
-		forward("/home.jsp");
+		forward("/search.jsp");
 	}
 
 	@Override
