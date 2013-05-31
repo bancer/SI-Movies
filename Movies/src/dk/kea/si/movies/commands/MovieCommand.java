@@ -9,6 +9,7 @@ import dk.kea.si.movies.domain.GoogleVideo;
 import dk.kea.si.movies.domain.Movie;
 import dk.kea.si.movies.gateways.GoogleGateway;
 import dk.kea.si.movies.gateways.RottenTomatoesGateway;
+import dk.kea.si.movies.gateways.WikipediaGateway;
 
 public class MovieCommand extends FrontCommand {
 
@@ -22,6 +23,9 @@ public class MovieCommand extends FrontCommand {
 		ArrayList<GoogleVideo> googleVideos = GoogleGateway.findVideos(
 				googleApiKey, query);
 		request.setAttribute("googleVideos", googleVideos);
+		
+		String wikiPage = WikipediaGateway.getWikiPage(movie.getTitle(), movie.getYear());
+		request.setAttribute("wikiPage", wikiPage);
 		
 		forward("/movie.jsp");
 	}
