@@ -39,9 +39,7 @@ public class RottenTomatoesGateway {
 			String page) throws MalformedURLException, IOException {
 		String url = String.format(LIST_TEMPLATE, apiKey, search, "" + LIMIT,
 				page);
-		String content = readUrlContents(url);
-		Gson gson = new Gson();
-		return gson.fromJson(content, MovieSearchResults.class);
+		return retrieveSearchResults(url);
 	}
 	
 	public static Movie findMovie(String apiKey, String id)
@@ -56,15 +54,18 @@ public class RottenTomatoesGateway {
 			throws MalformedURLException, IOException {
 		String url = String.format(IN_THEATERS_TEMPLATE, apiKey,
 				HOME_PAGE_LIMIT);
-		String content = readUrlContents(url);
-		Gson gson = new Gson();
-		return gson.fromJson(content, MovieSearchResults.class);
+		return retrieveSearchResults(url);
 	}
 	
 	public static MovieSearchResults findComingSoon(String apiKey)
 			throws MalformedURLException, IOException {
 		String url = String.format(COMING_SOON_TEMPLATE, apiKey,
 				HOME_PAGE_LIMIT);
+		return retrieveSearchResults(url);
+	}
+
+	private static MovieSearchResults retrieveSearchResults(String url)
+			throws IOException, MalformedURLException {
 		String content = readUrlContents(url);
 		Gson gson = new Gson();
 		return gson.fromJson(content, MovieSearchResults.class);
@@ -73,9 +74,7 @@ public class RottenTomatoesGateway {
 	public static MovieSearchResults findOpening(String apiKey)
 			throws MalformedURLException, IOException {
 		String url = String.format(OPENING_TEMPLATE, apiKey, HOME_PAGE_LIMIT);
-		String content = readUrlContents(url);
-		Gson gson = new Gson();
-		return gson.fromJson(content, MovieSearchResults.class);
+		return retrieveSearchResults(url);
 	}
 
 	private static String readUrlContents(String url) throws IOException,
