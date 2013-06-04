@@ -32,35 +32,56 @@ public class WikipediaGateway {
 			+ "index.php?action=render&title=%s";
 
 	public static String getWikiPage(String title, String year) {
+		String result = "";
 		String url = String.format(LIST_TEMPLATE, title, LIMIT);
 		try {
 			JAXBContext jc = JAXBContext.newInstance(SearchSuggestion.class);
 			Unmarshaller u = jc.createUnmarshaller();
 			SearchSuggestion ss = (SearchSuggestion) u.unmarshal(new URL(url));
-			ArrayList<Item> pages = new ArrayList<Item>(LIMIT);
-			List<Item> section = ss.getSection().getItem();
-			for (Iterator<Item> iterator = section.iterator(); iterator.hasNext();) {
-				Item item = (Item) iterator.next();
-				if (item.getText().getValue().toLowerCase().contains("film")) {
-					pages.add(item);
-				}
-			}
-			if (pages.size() > 1) {
-				for (Iterator<Item> iterator = pages.iterator(); iterator.hasNext();) {
-					Item item = (Item) iterator.next();
-					if (item.getText().getValue().contains(year)) {
-						return retrievePage(item.getText().getValue());
-					}
-				}
-			} else if (pages.size() == 1) {
-				return retrievePage(pages.get(0).getText().getValue());
-			}
+			result = filterResults(title, year, ss);
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		return result;
+	}
+
+	private static String filterResults(String title, String year,
+			SearchSuggestion results) {
+		ArrayList<Item> pages = new ArrayList<Item>(LIMIT);
+		List<Item> section = results.getSection().getItem();
+		//System.out.println("section size:"+section.size());
+		if(section.size() == 1) {
+			return retrievePage(section.get(0).getText().getValue());
+		}
+		for (Iterator<Item> iterator = section.iterator(); iterator.hasNext();) {
+			Item item = (Item) iterator.next();
+			//System.out.println("title:"+item.getText().getValue());
+			if (item.getText().getValue().toLowerCase().contains("film")) {
+				pages.add(item);
+			}
+		}
+		if (pages.size() > 1) {
+			for (Iterator<Item> iterator = pages.iterator(); iterator.hasNext();) {
+				Item item = (Item) iterator.next();
+				if (item.getText().getValue().contains(year)) {
+					return retrievePage(item.getText().getValue());
+				}
+			}
+		} else if (pages.size() == 1) {
+			return retrievePage(pages.get(0).getText().getValue());
+		} else {
+			//System.out.println("page size is 0");
+			for (Iterator<Item> iterator = section.iterator(); iterator.hasNext();) {
+				Item item = (Item) iterator.next();
+				//System.out.println(item.getText().getValue());
+				if(item.getText().getValue().toLowerCase().equals(title.toLowerCase())) {
+					return retrievePage(item.getText().getValue());
+				}
+			}
 		}
 		return "";
 	}
