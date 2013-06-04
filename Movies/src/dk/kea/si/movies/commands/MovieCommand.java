@@ -24,7 +24,11 @@ public class MovieCommand extends FrontCommand {
 				googleApiKey, query);
 		request.setAttribute("googleVideos", googleVideos);
 		
-		String wikiPage = WikipediaGateway.getWikiPage(movie.getTitle(), movie.getYear());
+		String wikiPage = WikipediaGateway.getWikiPage(movie.getTitle(),
+				movie.getYear());
+		//fix relative urls
+		wikiPage = wikiPage.replaceAll("a href=\"#", "a href=\""
+				+ getFullRequestURL() + "#");
 		request.setAttribute("wikiPage", wikiPage);
 		
 		forward("/movie.jsp");
@@ -34,6 +38,14 @@ public class MovieCommand extends FrontCommand {
 	public void processPost() throws ServletException, IOException {
 		// TODO Auto-generated method stub
 
+	}
+	
+	private String getFullRequestURL() {
+		StringBuffer requestURL = request.getRequestURL();
+		if (request.getQueryString() != null) {
+		    requestURL.append("?").append(request.getQueryString());
+		}
+		return requestURL.toString();
 	}
 
 }
