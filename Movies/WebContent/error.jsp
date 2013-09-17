@@ -21,8 +21,7 @@
 				<div><%=exception.toString()%></div>
 				<div>
 					<h2>StackTrace</h2>
-					<pre>
-						<%
+					<pre><%
 							StringWriter stringWriter = new StringWriter();
 							PrintWriter printWriter = new PrintWriter(stringWriter);
 							exception.printStackTrace(printWriter);
@@ -30,7 +29,7 @@
 							printWriter.close();
 							stringWriter.close();
 						%>
-				</pre>
+					</pre>
 				</div>
 			</div>
 		</div>
