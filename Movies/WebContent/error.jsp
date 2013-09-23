@@ -36,4 +36,5 @@
 		<%@ include file="inc/footer.jsp"%>
 	</div>
 </body>
+
 </html>

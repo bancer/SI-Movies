@@ -21,13 +21,15 @@
 			<li class="dropdown pull-right"><a data-toggle="dropdown" id="username"
 				class="dropdown-toggle" href="#"> <%= user.getUsername() %> <b
 					class="caret"></b>
-			</a> <!-- Dropdown menu -->
+			</a>
+			 <!-- Dropdown menu -->
 				<ul class="dropdown-menu">
-					<li><a href="#"><i class="icon-user"></i> Profile</a></li>
-					<li><a href="#"><i class="icon-cogs"></i> Settings</a></li>
-					<li><a href="?command=SignOut"><i class="icon-off"></i>
-							Logout</a></li>
+				<!--<li><a href="#"><i class="icon-user"></i> Profile</a></li>
+					<li><a href="#"><i class="icon-cogs"></i> Settings</a></li> -->
+					
 				</ul></li>
+				<li><a id="logout" href="?command=SignOut" ><i class="icon-off"></i>
+							Logout</a></li>
 		</ul>
 		<% } else { %>
 		<ul class="nav pull-right s">

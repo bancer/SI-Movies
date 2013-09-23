@@ -27,3 +27,4 @@ public class SearchMoviesCommand  extends FrontCommand {
 	}
 
 }
+
