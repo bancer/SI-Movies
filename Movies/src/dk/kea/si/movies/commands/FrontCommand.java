@@ -21,6 +21,8 @@ public abstract class FrontCommand {
 
 	protected String googleApiKey;
 	
+	protected String openidApiKey;  
+	
 	public abstract void process() throws ServletException, IOException;
 	
 	public abstract void processPost() throws ServletException, IOException;
@@ -34,6 +36,8 @@ public abstract class FrontCommand {
 				.getInitParameter("rottentomatoes-api-key");
 		this.googleApiKey = request.getSession().getServletContext()
 				.getInitParameter("google-api-key");
+		this.openidApiKey = request.getSession().getServletContext()
+				.getInitParameter("openid-api-key");
 	}
 	
 	protected void forward(String target) throws ServletException, IOException {

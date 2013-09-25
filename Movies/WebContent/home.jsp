@@ -15,8 +15,10 @@
 	
 	<base href="<%=request.getContextPath()%>/" />
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	
 </head>
-<body>		
+<body>
+	<%@ include file="inc/scripts.jsp"%>
 	<div id="shell">
 		<%@ include file="inc/header.jsp"%>
 		<div id="main">
