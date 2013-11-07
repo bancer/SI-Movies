@@ -45,6 +45,8 @@ public class RottenTomatoesGateway {
 	public static Movie findMovie(String apiKey, String id)
 			throws MalformedURLException, IOException {
 		String url = String.format(MOVIE_TEMPLATE, id, apiKey);
+		//TODO: check if there is a fresh cache of this url in the database
+		// if not then send the request to RottenTomatoes
 		String content = readUrlContents(url);
 		Gson gson = new Gson();
 		return gson.fromJson(content, Movie.class);

@@ -1,4 +1,4 @@
 SI-Movies
 =========
-System Integration class project.
+JavaEE project.
 Integrates few RESTful web services.

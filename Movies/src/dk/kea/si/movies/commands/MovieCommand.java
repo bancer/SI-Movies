@@ -17,6 +17,8 @@ public class MovieCommand extends FrontCommand {
 	@Override
 	public void process() throws ServletException, IOException {
 		String id = request.getParameter("id");
+		//TODO: check if the movie with this id is present in the database
+		// if it is not then send the request to RottenTomatoes	
 		Movie movie = RottenTomatoesGateway.findMovie(rottenTomatoesApiKey, id);
 		request.setAttribute("movie", movie);
 		
