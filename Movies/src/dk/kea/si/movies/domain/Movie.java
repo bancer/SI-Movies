@@ -1,8 +1,6 @@
 package dk.kea.si.movies.domain;
 
-public class Movie {
-	
-	private String id;
+public class Movie extends DomainObject {
 	
 	private String title;
 	
@@ -33,14 +31,6 @@ public class Movie {
 	private AlternateIds alternate_ids;
 	
 	private Links links;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public String getTitle() {
 		return title;

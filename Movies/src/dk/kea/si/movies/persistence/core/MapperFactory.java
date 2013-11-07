@@ -93,7 +93,7 @@ public class MapperFactory {
 	 */
 	private AbstractMapper createMapper(String domainClassName) {
 		AbstractMapper mapperObject = null;
-		String mapperClassName = "com.marv.persistence.mappers."
+		String mapperClassName = "dk.kea.si.movies.persistence.mappers."
 				+ domainClassName + "Mapper";
 		try {
 			Class<?> mapperClass = Class.forName(mapperClassName);

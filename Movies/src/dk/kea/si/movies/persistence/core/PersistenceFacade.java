@@ -2,7 +2,10 @@ package dk.kea.si.movies.persistence.core;
 
 import java.util.ArrayList;
 
+import dk.kea.si.movies.domain.Cache;
 import dk.kea.si.movies.domain.DomainObject;
+import dk.kea.si.movies.persistence.mappers.AbstractMapper;
+import dk.kea.si.movies.persistence.mappers.CacheMapper;
 
 //import com.marv.business.entities.AuctionItem;
 //import com.marv.business.entities.DomainObject;
@@ -88,6 +91,11 @@ public class PersistenceFacade implements Cloneable {
 		} else {
 			return update(obj) > 0;
 		}
+	}
+
+	public Cache findCache(String request) {
+		CacheMapper mapper = (CacheMapper) mapperFactory.getMapper(Cache.class);
+		return mapper.find(request);
 	}
 
 //	public ArrayList<AuctionItem> findAllAuctionItemsByCategory(long categoryId) {

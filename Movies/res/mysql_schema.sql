@@ -7,26 +7,12 @@ CREATE SCHEMA IF NOT EXISTS `movies` DEFAULT CHARACTER SET utf8 COLLATE utf8_gen
 USE `movies` ;
 
 -- -----------------------------------------------------
--- Table `movies`.`Director`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `movies`.`Director` ;
-
-CREATE TABLE IF NOT EXISTS `movies`.`Director` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `idx_name` (`name` ASC))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `movies`.`Movie`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `movies`.`Movie` ;
 
 CREATE TABLE IF NOT EXISTS `movies`.`Movie` (
   `id` INT NOT NULL,
-  `director_id` INT NOT NULL,
   `title` VARCHAR(255) NOT NULL,
   `year` YEAR NOT NULL,
   `timeline` ENUM('in theaters', 'opening', 'coming soon', 'other') NOT NULL,
@@ -36,13 +22,7 @@ CREATE TABLE IF NOT EXISTS `movies`.`Movie` (
   `studio` VARCHAR(255) NULL,
   `critics_consensus` TEXT NULL,
   `synopsis` TEXT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_Movie_Director1_idx` (`director_id` ASC),
-  CONSTRAINT `fk_Movie_Director1`
-    FOREIGN KEY (`director_id`)
-    REFERENCES `movies`.`Director` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 
@@ -144,6 +124,19 @@ CREATE TABLE IF NOT EXISTS `movies`.`Character` (
     REFERENCES `movies`.`Movie` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `movies`.`Director`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `movies`.`Director` ;
+
+CREATE TABLE IF NOT EXISTS `movies`.`Director` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `idx_name` (`name` ASC))
 ENGINE = InnoDB;
 
 
@@ -332,6 +325,30 @@ CREATE TABLE IF NOT EXISTS `movies`.`Cache` (
   `time` TIMESTAMP NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `idx_hash` (`hash` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `movies`.`MovieDirector`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `movies`.`MovieDirector` ;
+
+CREATE TABLE IF NOT EXISTS `movies`.`MovieDirector` (
+  `director_id` INT NOT NULL,
+  `movie_id` INT NOT NULL,
+  PRIMARY KEY (`director_id`, `movie_id`),
+  INDEX `fk_table1_Director1_idx` (`director_id` ASC),
+  INDEX `fk_table1_Movie1_idx` (`movie_id` ASC),
+  CONSTRAINT `fk_table1_Director1`
+    FOREIGN KEY (`director_id`)
+    REFERENCES `movies`.`Director` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_table1_Movie1`
+    FOREIGN KEY (`movie_id`)
+    REFERENCES `movies`.`Movie` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 

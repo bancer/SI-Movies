@@ -44,7 +44,7 @@ public class UserMapper extends AbstractMapper {
 
 	@Override
 	protected String insertStatement() {
-		return "INSERT INTO users (address, email, first_name, last_name," +
+		return "INSERT INTO User (address, email, first_name, last_name," +
 				" user_name, phone)" +
 				" VALUES (?, ?, ?, ?, ?, ?)";
 	}

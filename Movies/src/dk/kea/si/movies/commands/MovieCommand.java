@@ -6,6 +6,9 @@ import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 
+import com.google.gson.Gson;
+
+import dk.kea.si.movies.domain.Cache;
 import dk.kea.si.movies.domain.GoogleVideo;
 import dk.kea.si.movies.domain.Movie;
 import dk.kea.si.movies.gateways.GoogleGateway;
@@ -16,10 +19,17 @@ public class MovieCommand extends FrontCommand {
 
 	@Override
 	public void process() throws ServletException, IOException {
+		Movie movie = null;
 		String id = request.getParameter("id");
-		//TODO: check if the movie with this id is present in the database
-		// if it is not then send the request to RottenTomatoes	
-		Movie movie = RottenTomatoesGateway.findMovie(rottenTomatoesApiKey, id);
+		Cache cache = getStorage().findCache("movie/" + id);
+		if(cache == null) {
+			//TODO: check if the movie with this id is present in the database
+			// if it is not then send the request to RottenTomatoes	
+			movie = RottenTomatoesGateway.findMovie(rottenTomatoesApiKey, id);
+		} else {
+			movie = new Gson().fromJson(cache.getResponse(), Movie.class);
+		}
+		
 		request.setAttribute("movie", movie);
 		
 		String query = movie.getTitle() + " " + movie.getYear() + " trailer";

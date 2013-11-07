@@ -21,7 +21,7 @@ public class MysqlConnection {
 	/**
 	 * A database URL of the form jdbc:subprotocol:subname
 	 */
-	private static final String DB_URL = "jdbc:mysql://localhost/marv";
+	private static final String DB_URL = "jdbc:mysql://localhost/movies";
 
 	/**
 	 * The database user on whose behalf the connection is being made.
