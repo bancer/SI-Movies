@@ -319,6 +319,22 @@ CREATE TABLE IF NOT EXISTS `movies`.`Release` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `movies`.`Cache`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `movies`.`Cache` ;
+
+CREATE TABLE IF NOT EXISTS `movies`.`Cache` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `hash` INT NOT NULL,
+  `request` VARCHAR(255) NOT NULL,
+  `response` TEXT NOT NULL,
+  `time` TIMESTAMP NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `idx_hash` (`hash` ASC))
+ENGINE = InnoDB;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

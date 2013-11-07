@@ -11,6 +11,7 @@ public class HomeCommand extends FrontCommand {
 
 	@Override
 	public void process() throws ServletException, IOException {
+		//TODO: check if the cache exist in the database for each request below
 		MovieSearchResults results = RottenTomatoesGateway
 				.findCurrentlyInTheaters(rottenTomatoesApiKey);
 		request.setAttribute("inTheaters", results);
