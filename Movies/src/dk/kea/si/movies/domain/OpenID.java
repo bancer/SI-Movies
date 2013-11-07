@@ -1,6 +1,9 @@
 package dk.kea.si.movies.domain;
 
-public class OpenID {
+import javax.persistence.*;
+
+//@Entity
+public class OpenID extends DomainObject {
 
 	private String identifier;
 	

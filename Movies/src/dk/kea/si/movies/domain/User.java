@@ -2,7 +2,7 @@ package dk.kea.si.movies.domain;
 
 import java.util.ArrayList;
 
-public class User {
+public class User extends DomainObject {
 
 	private String username;
 
@@ -17,8 +17,6 @@ public class User {
 	private String firstName;
 
 	private String lastName;
-
-	private long institutionId;
 
 	private ArrayList<OpenID> openIds;
 
@@ -126,22 +124,10 @@ public class User {
 		}
 	}
 
-	public void setInstitutionId(long institutionId) {
-		this.institutionId = institutionId;
-		if (institutionId < -1L || institutionId == 0) {
-			throw new IllegalArgumentException(
-					"Institution ID cannot be less than -1 or 0.");
-		}
-	}
-
-	public long getInstitutionId() {
-		return institutionId;
-	}
-
 	@Override
 	public String toString() {
 		String result = "[" + address + ", " + email + ", " + firstName + ", "
-				+ institutionId + ", " + lastName + ", " + password + ", "
+				+ lastName + ", " + password + ", "
 				+ phone + ", " + username + ", [";
 		for (int i = 0; i < openIds.size(); i++) {
 			result += openIds.get(i).toString();
