@@ -38,6 +38,9 @@ public class HomeCommand extends FrontCommand {
 		MovieSearchResults results = null;
 		Cache cache = getStorage().findCache(cacheRequest);
 		if (cache == null || cache.isOlderThan24Hours()) {
+			//TODO: update Movie.timeline from here, because the request of 
+			//individual movie from RottenTomatoes does not contain info
+			//whether the movie is in theatre, opening or so on.
 			if (cacheRequest.equals(CACHE_REQUEST_IN_THEATERS)) {
 				results = RottenTomatoesGateway
 						.findCurrentlyInTheaters(rottenTomatoesApiKey);

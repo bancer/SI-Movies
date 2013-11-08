@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `movies`.`Movie` (
   `year` YEAR NOT NULL,
   `timeline` ENUM('in theaters', 'opening', 'coming soon', 'other') NOT NULL,
   `runtime` INT NOT NULL,
-  `mpaa_rating` CHAR NULL,
+  `mpaa_rating` VARCHAR(5) NULL,
   `users_rating_score` FLOAT NULL,
   `studio` VARCHAR(255) NULL,
   `critics_consensus` TEXT NULL,
@@ -217,6 +217,7 @@ CREATE TABLE IF NOT EXISTS `movies`.`Review` (
   `publication` VARCHAR(255) NULL,
   `quote` TEXT NULL,
   `link` VARCHAR(255) NULL,
+  `country` CHAR(2) NOT NULL DEFAULT 'US',
   PRIMARY KEY (`id`),
   INDEX `fk_Review_Movie1_idx` (`movie_id` ASC),
   CONSTRAINT `fk_Review_Movie1`
@@ -298,12 +299,11 @@ DROP TABLE IF EXISTS `movies`.`Release` ;
 CREATE TABLE IF NOT EXISTS `movies`.`Release` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `movie_id` INT NOT NULL,
-  `country` CHAR(2) NOT NULL,
   `type` ENUM('theater', 'dvd') NOT NULL,
   `release_date` DATE NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_Release_Movie1_idx` (`movie_id` ASC),
-  UNIQUE INDEX `idx_country_movie` (`movie_id` ASC, `country` ASC, `type` ASC),
+  UNIQUE INDEX `idx_country_movie` (`movie_id` ASC, `type` ASC),
   CONSTRAINT `fk_Release_Movie1`
     FOREIGN KEY (`movie_id`)
     REFERENCES `movies`.`Movie` (`id`)

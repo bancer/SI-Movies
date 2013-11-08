@@ -1,7 +1,6 @@
 package dk.kea.si.movies.commands;
 
 import java.io.IOException;
-
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -21,13 +20,28 @@ public class MovieCommand extends FrontCommand {
 	public void process() throws ServletException, IOException {
 		Movie movie = null;
 		String id = request.getParameter("id");
-		Cache cache = getStorage().findCache("movie/" + id);
-		if(cache == null) {
-			//TODO: check if the movie with this id is present in the database
-			// if it is not then send the request to RottenTomatoes	
+		String cacheRequest = "movie/" + id;
+		Cache cache = getStorage().findCache(cacheRequest);
+		if(cache == null || cache.isOlderThan1Week()) {
 			movie = RottenTomatoesGateway.findMovie(rottenTomatoesApiKey, id);
+			String json = new Gson().toJson(movie, Movie.class);
+			if(cache == null) {
+				cache = new Cache(cacheRequest, json);
+				getStorage().insert(cache);
+			} else {
+				cache.setResponse(json);
+				cache.refreshTimestamp();
+				getStorage().update(cache);
+			}	
 		} else {
 			movie = new Gson().fromJson(cache.getResponse(), Movie.class);
+		}
+		
+		Movie dbMovie = (Movie) getStorage().find(Long.parseLong(id), Movie.class);
+		if(dbMovie == null) {
+			getStorage().insert(movie);
+		} else {
+			//getStorage().update(dbMovie);
 		}
 		
 		request.setAttribute("movie", movie);

@@ -2,6 +2,10 @@ package dk.kea.si.movies.domain;
 
 public class Movie extends DomainObject {
 	
+	public enum Timeline {
+		IN_THEATERS, COMING_SOON, OPENING, OTHER
+	}
+	
 	private String title;
 	
 	private String year;
@@ -10,6 +14,9 @@ public class Movie extends DomainObject {
 	
 	private String mpaa_rating;
 	
+	// TODO: convert runtime to integer type. It will cause Gson
+	// NumberFormatException. See how to handle that in the link below.
+	// http://stackoverflow.com/questions/8863429/how-to-handle-a-numberformatexception-with-gson-in-deserialization-a-json-respon
 	private String runtime;
 	
 	private String critics_consensus;
@@ -31,6 +38,14 @@ public class Movie extends DomainObject {
 	private AlternateIds alternate_ids;
 	
 	private Links links;
+	
+	private Timeline timeline;
+	
+	private float usersRatingScore;
+	
+	public Movie() {
+		timeline = Timeline.OTHER;
+	}
 
 	public String getTitle() {
 		return title;
@@ -150,6 +165,22 @@ public class Movie extends DomainObject {
 
 	public void setStudio(String studio) {
 		this.studio = studio;
+	}
+
+	public Timeline getTimeline() {
+		return timeline;
+	}
+
+	public void setTimeline(Timeline timeline) {
+		this.timeline = timeline;
+	}
+
+	public float getUsersRatingScore() {
+		return usersRatingScore;
+	}
+
+	public void setUsersRatingScore(float usersRatingScore) {
+		this.usersRatingScore = usersRatingScore;
 	}
 
 }

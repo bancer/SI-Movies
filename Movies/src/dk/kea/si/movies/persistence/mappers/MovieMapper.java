@@ -5,13 +5,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import dk.kea.si.movies.domain.DomainObject;
+import dk.kea.si.movies.domain.Movie;
+import dk.kea.si.movies.domain.Movie.Timeline;
+import dk.kea.si.movies.util.ApplicationException;
 
 public class MovieMapper extends AbstractMapper {
 
+	public static final String COLUMNS = "Movie.id, Movie.title, Movie.year,"
+			+ " Movie.timeline, Movie.runtime, Movie.mpaa_rating,"
+			+ " Movie.users_rating_score, Movie.studio, Movie.critics_consensus,"
+			+ " Movie.synopsis";
+
 	@Override
 	protected String findStatement() {
-		// TODO Auto-generated method stub
-		return null;
+		return "SELECT " + COLUMNS + " FROM Movie AS Movie"
+				+ " WHERE Movie.id=?" + " LIMIT 1";
 	}
 
 	@Override
@@ -28,9 +36,9 @@ public class MovieMapper extends AbstractMapper {
 
 	@Override
 	protected String insertStatement() {
-		return "INSERT INTO Movie (title, year, timeline, runtime, mpaa_rating" +
-				" user_rating_score, studio, critics_consensus, synopsis)" +
-				" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		return "INSERT INTO Movie (id, title, year, timeline, runtime,"
+				+ " mpaa_rating, users_rating_score, studio, critics_consensus,"
+				+ " synopsis)" + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	}
 
 	@Override
@@ -41,8 +49,18 @@ public class MovieMapper extends AbstractMapper {
 
 	@Override
 	protected DomainObject doLoad(Long id, ResultSet rs) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		Movie movie = new Movie();
+		movie.setId(rs.getLong("Movie.id"));
+		movie.setTitle(rs.getString("Movie.title"));
+		movie.setYear(rs.getString("Movie.year"));
+		movie.setTimeline(Timeline.valueOf(rs.getString("Movie.timeline")));
+		movie.setRuntime("" + rs.getInt("Movie.runtime"));
+		movie.setMpaa_rating(rs.getString("Movie.mpaa_rating"));
+		movie.setUsersRatingScore(rs.getFloat("Movie.users_rating_score"));
+		movie.setStudio(rs.getString("Movie.studio"));
+		movie.setCritics_consensus(rs.getString("Movie.critics_consensus"));
+		movie.setSynopsis(rs.getString("Movie.synopsis"));
+		return movie;
 	}
 
 	@Override
@@ -55,8 +73,17 @@ public class MovieMapper extends AbstractMapper {
 	@Override
 	protected void doInsert(DomainObject o, PreparedStatement s)
 			throws SQLException {
-		// TODO Auto-generated method stub
-
+		Movie movie = (Movie) o;
+		s.setLong(1, movie.getId());
+		s.setString(2, movie.getTitle());
+		s.setString(3, movie.getYear());
+		s.setString(4, movie.getTimeline().toString());
+		s.setInt(5, Integer.parseInt(movie.getRuntime()));
+		s.setString(6, movie.getMpaa_rating());
+		s.setFloat(7, movie.getUsersRatingScore());
+		s.setString(8, movie.getStudio());
+		s.setString(9, movie.getCritics_consensus());
+		s.setString(10, movie.getSynopsis());
 	}
 
 	@Override
@@ -68,8 +95,26 @@ public class MovieMapper extends AbstractMapper {
 
 	@Override
 	public DomainObject find(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		DomainObject result = (DomainObject) loadedMap.get(id);
+		if (result != null) {
+			return result;
+		}
+		PreparedStatement findStatement = null;
+		try {
+			findStatement = getConnection().prepareStatement(findStatement());
+			findStatement.setLong(1, id);
+			System.out.println(findStatement);
+			ResultSet rs = findStatement.executeQuery();
+			if (rs.next()) {
+				return load(rs);
+			} else {
+				return null;
+			}
+		} catch (SQLException e) {
+			throw new ApplicationException(e);
+		} finally {
+			closeStatement(findStatement);
+		}
 	}
 
 }

@@ -59,4 +59,9 @@ public class Cache extends DomainObject {
 		long now = System.currentTimeMillis()/1000L;
 		return now - timestamp > 86400;
 	}
+
+	public boolean isOlderThan1Week() {
+		long now = System.currentTimeMillis()/1000L;
+		return now - timestamp > 604800;
+	}
 }
