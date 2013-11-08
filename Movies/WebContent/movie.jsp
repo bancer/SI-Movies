@@ -58,7 +58,7 @@
 					(<%=movie.getRatings().getAudience_score()%>) <br />
 					Critics -
 					<%=movie.getRatings().getCritics_rating()%>
-					(<%=movie.getRatings().getCriticts_score()%>)
+					(<%=movie.getRatings().getCritics_score()%>)
 				</div>
 				<div>
 					<h4>Runtime:</h4>

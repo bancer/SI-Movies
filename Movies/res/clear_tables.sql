@@ -1,3 +1,4 @@
+TRUNCATE CriticRating;
 TRUNCATE Poster;
-TRUNCATE Release;
+TRUNCATE `Release`;
 DELETE FROM Movie;

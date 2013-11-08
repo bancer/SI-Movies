@@ -9,6 +9,7 @@ import dk.kea.si.movies.domain.DomainObject;
 import dk.kea.si.movies.domain.Movie;
 import dk.kea.si.movies.domain.Movie.Timeline;
 import dk.kea.si.movies.domain.Posters;
+import dk.kea.si.movies.domain.Ratings;
 import dk.kea.si.movies.domain.ReleaseDates;
 import dk.kea.si.movies.util.ApplicationException;
 
@@ -143,6 +144,10 @@ public class MovieMapper extends AbstractMapper {
 			Posters posters = movie.getPosters();
 			posters.setMovieId(movie.getId());
 			getMapper(Posters.class).insert(posters);
+			
+			Ratings ratings = movie.getRatings();
+			ratings.setMovieId(movie.getId());
+			getMapper(Ratings.class).insert(ratings);
 			
 			commitTransaction();
 			return lastInsertId;
