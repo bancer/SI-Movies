@@ -1,5 +1,7 @@
 package dk.kea.si.movies.domain;
 
+import java.util.List;
+
 public class Movie extends DomainObject {
 	
 	public enum Timeline {
@@ -42,6 +44,8 @@ public class Movie extends DomainObject {
 	private Timeline timeline;
 	
 	private float usersRatingScore;
+	
+	private List<Review> reviews;
 	
 	public Movie() {
 		timeline = Timeline.OTHER;
@@ -181,6 +185,14 @@ public class Movie extends DomainObject {
 
 	public void setUsersRatingScore(float usersRatingScore) {
 		this.usersRatingScore = usersRatingScore;
+	}
+
+	public List<Review> getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(List<Review> reviews) {
+		this.reviews = reviews;
 	}
 
 }

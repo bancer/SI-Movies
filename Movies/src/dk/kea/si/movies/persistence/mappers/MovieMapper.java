@@ -14,6 +14,7 @@ import dk.kea.si.movies.domain.Movie.Timeline;
 import dk.kea.si.movies.domain.Posters;
 import dk.kea.si.movies.domain.Ratings;
 import dk.kea.si.movies.domain.ReleaseDates;
+import dk.kea.si.movies.domain.Review;
 import dk.kea.si.movies.util.ApplicationException;
 
 public class MovieMapper extends AbstractMapper {
@@ -147,6 +148,7 @@ public class MovieMapper extends AbstractMapper {
 			insertLinks(movie);
 			insertGenres(movie);
 			insertDirectors(movie);
+			insertReviews(movie);
 
 			commitTransaction();
 			return lastInsertId;
@@ -156,6 +158,15 @@ public class MovieMapper extends AbstractMapper {
 		} finally {
 			closeStatement(insertStatement);
 			endTransaction();
+		}
+	}
+
+	private void insertReviews(Movie movie) {
+		ReviewMapper reviewMapper = (ReviewMapper) getMapper(Review.class);
+		for (int i = 0; i < movie.getReviews().size(); i++) {
+			Review review = movie.getReviews().get(i);
+			review.setMovieId(movie.getId());
+			reviewMapper.insert(review);
 		}
 	}
 

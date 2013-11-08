@@ -11,12 +11,23 @@ import com.google.gson.Gson;
 
 import dk.kea.si.movies.domain.Movie;
 import dk.kea.si.movies.domain.MovieSearchResults;
+import dk.kea.si.movies.domain.Reviews;
 
 public class RottenTomatoesGateway {
+
+	private static final int PAGE_1 = 1;
+
+	private enum ReviewType {
+		top_critic, all, dvd
+	}
 
 	private static final int LIMIT = 10;
 
 	private static final int HOME_PAGE_LIMIT = 6;
+
+	private static final int MAX_PAGE_LIMIT = 50;
+
+	private static final String DEFAULT_COUNTRY = "us";
 
 	private static final String ROOT_URL = "http://api.rottentomatoes.com/api/public/v1.0/";
 
@@ -25,15 +36,19 @@ public class RottenTomatoesGateway {
 
 	private static final String MOVIE_TEMPLATE = ROOT_URL
 			+ "movies/%s.json?apikey=%s";
-	
+
 	private static final String IN_THEATERS_TEMPLATE = ROOT_URL
 			+ "lists/movies/in_theaters.json?apikey=%s&page_limit=%s";
-	
+
 	private static final String COMING_SOON_TEMPLATE = ROOT_URL
 			+ "lists/movies/upcoming.json?apikey=%s&page_limit=%s";
-	
+
 	private static final String OPENING_TEMPLATE = ROOT_URL
 			+ "lists/movies/opening.json?apikey=%s&limit=%s";
+
+	private static final String REVIEWS_TEMPLATE = ROOT_URL
+			+ "movies/%s/reviews.json?apikey=%s"
+			+ "&review_type=%s&page_limit=%s&page=%s&country=%s";
 
 	public static MovieSearchResults searchMovies(String apiKey, String search,
 			String page) throws MalformedURLException, IOException {
@@ -41,24 +56,24 @@ public class RottenTomatoesGateway {
 				page);
 		return retrieveSearchResults(url);
 	}
-	
+
 	public static Movie findMovie(String apiKey, String id)
 			throws MalformedURLException, IOException {
 		String url = String.format(MOVIE_TEMPLATE, id, apiKey);
-		//TODO: check if there is a fresh cache of this url in the database
+		// TODO: check if there is a fresh cache of this url in the database
 		// if not then send the request to RottenTomatoes
 		String content = readUrlContents(url);
 		Gson gson = new Gson();
 		return gson.fromJson(content, Movie.class);
 	}
-	
+
 	public static MovieSearchResults findCurrentlyInTheaters(String apiKey)
 			throws MalformedURLException, IOException {
 		String url = String.format(IN_THEATERS_TEMPLATE, apiKey,
 				HOME_PAGE_LIMIT);
 		return retrieveSearchResults(url);
 	}
-	
+
 	public static MovieSearchResults findComingSoon(String apiKey)
 			throws MalformedURLException, IOException {
 		String url = String.format(COMING_SOON_TEMPLATE, apiKey,
@@ -72,11 +87,21 @@ public class RottenTomatoesGateway {
 		Gson gson = new Gson();
 		return gson.fromJson(content, MovieSearchResults.class);
 	}
-	
+
 	public static MovieSearchResults findOpening(String apiKey)
 			throws MalformedURLException, IOException {
 		String url = String.format(OPENING_TEMPLATE, apiKey, HOME_PAGE_LIMIT);
 		return retrieveSearchResults(url);
+	}
+
+	public static Reviews findReviews(String apiKey, String movieId)
+			throws MalformedURLException, IOException {
+		String url = String.format(REVIEWS_TEMPLATE, movieId, apiKey,
+				ReviewType.top_critic.toString(), MAX_PAGE_LIMIT, PAGE_1,
+				DEFAULT_COUNTRY);
+		String content = readUrlContents(url);
+		Gson gson = new Gson();
+		return gson.fromJson(content, Reviews.class);
 	}
 
 	private static String readUrlContents(String url) throws IOException,
@@ -90,4 +115,3 @@ public class RottenTomatoesGateway {
 		return content;
 	}
 }
-

@@ -12,6 +12,12 @@ public class Links extends DomainObject {
 	
 	private String reviews;
 	
+	/**
+	 * This field holds a link to a single movie review. It is used by Review
+	 * class.
+	 */
+	private String review;
+	
 	private String similar;
 	
 	private long movieId;
@@ -70,6 +76,14 @@ public class Links extends DomainObject {
 
 	public void setMovieId(long movieId) {
 		this.movieId = movieId;
+	}
+
+	public String getReview() {
+		return review;
+	}
+
+	public void setReview(String review) {
+		this.review = review;
 	}
 	
 }

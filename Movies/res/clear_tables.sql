@@ -1,3 +1,4 @@
+TRUNCATE Review;
 TRUNCATE MovieDirector;
 DELETE FROM Director;
 TRUNCATE Genre;
