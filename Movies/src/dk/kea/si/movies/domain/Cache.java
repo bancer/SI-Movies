@@ -8,7 +8,16 @@ public class Cache extends DomainObject {
 	
 	private String response;
 	
-	private int timestamp;
+	private long timestamp;
+	
+	public Cache() {
+	}
+
+	public Cache(String request, String response) {
+		this.hash = request.hashCode();
+		this.request = request;
+		this.response = response;
+	}
 
 	public int getHash() {
 		return hash;
@@ -34,11 +43,20 @@ public class Cache extends DomainObject {
 		this.response = response;
 	}
 
-	public int getTimestamp() {
+	public long getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(int timestamp) {
+	public void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
+	}
+	
+	public void refreshTimestamp() {
+		timestamp = System.currentTimeMillis()/1000L;
+	}
+
+	public boolean isOlderThan24Hours() {
+		long now = System.currentTimeMillis()/1000L;
+		return now - timestamp > 86400;
 	}
 }
