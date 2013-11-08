@@ -1,6 +1,6 @@
 package dk.kea.si.movies.domain;
 
-public class Directors {
+public class Directors extends DomainObject {
 
 	private String name;
 

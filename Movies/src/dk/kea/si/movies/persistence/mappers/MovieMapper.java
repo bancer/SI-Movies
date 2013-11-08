@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import dk.kea.si.movies.domain.AlternateIds;
+import dk.kea.si.movies.domain.Directors;
 import dk.kea.si.movies.domain.DomainObject;
 import dk.kea.si.movies.domain.Links;
 import dk.kea.si.movies.domain.Movie;
@@ -122,7 +123,7 @@ public class MovieMapper extends AbstractMapper {
 			closeStatement(findStatement);
 		}
 	}
-	
+
 	public long insert(DomainObject obj) {
 		PreparedStatement insertStatement = null;
 		try {
@@ -145,6 +146,7 @@ public class MovieMapper extends AbstractMapper {
 			insertAlternateIds(movie);
 			insertLinks(movie);
 			insertGenres(movie);
+			insertDirectors(movie);
 
 			commitTransaction();
 			return lastInsertId;
@@ -154,6 +156,23 @@ public class MovieMapper extends AbstractMapper {
 		} finally {
 			closeStatement(insertStatement);
 			endTransaction();
+		}
+	}
+
+	private void insertDirectors(Movie movie) {
+		DirectorsMapper directorsMapper = (DirectorsMapper) getMapper(Directors.class);
+		MovieDirectorMapper movieDirectorMapper = new MovieDirectorMapper();
+		for (int i = 0; i < movie.getAbridged_directors().length; i++) {
+			Directors directors = movie.getAbridged_directors()[i];
+			Directors storedDirectors = directorsMapper.findByName(directors
+					.getName());
+			if (storedDirectors == null) {
+				long lastId = directorsMapper.insert(directors);
+				directors.setId(lastId);
+			} else {
+				directors = storedDirectors;
+			}
+			movieDirectorMapper.insert(movie.getId(), directors.getId());
 		}
 	}
 
@@ -193,8 +212,7 @@ public class MovieMapper extends AbstractMapper {
 		releases.setMovieId(movie.getId());
 		getMapper(ReleaseDates.class).insert(releases);
 	}
-	
-	
+
 	class GenreMapper {
 
 		protected String insertStatement() {
@@ -221,6 +239,36 @@ public class MovieMapper extends AbstractMapper {
 				throws SQLException {
 			s.setLong(1, movieId);
 			s.setString(2, genre);
+		}
+	}
+
+	class MovieDirectorMapper {
+
+		protected String insertStatement() {
+			return "INSERT INTO MovieDirector (director_id, movie_id)"
+					+ " VALUES (?, ?);";
+		}
+
+		public long insert(long movieId, long directorId) {
+			PreparedStatement insertStatement = null;
+			try {
+				insertStatement = getConnection().prepareStatement(
+						insertStatement(), Statement.RETURN_GENERATED_KEYS);
+				doInsert(movieId, directorId, insertStatement);
+				System.out.println(insertStatement);
+				insertStatement.execute();
+				return findLastInsertId(insertStatement);
+			} catch (SQLException e) {
+				throw new ApplicationException(e);
+			} finally {
+				closeStatement(insertStatement);
+			}
+		}
+
+		protected void doInsert(long movieId, long directorId,
+				PreparedStatement s) throws SQLException {
+			s.setLong(1, directorId);
+			s.setLong(2, movieId);
 		}
 	}
 }

@@ -1,3 +1,5 @@
+TRUNCATE MovieDirector;
+DELETE FROM Director;
 TRUNCATE Genre;
 TRUNCATE Link;
 TRUNCATE AlternateID;
