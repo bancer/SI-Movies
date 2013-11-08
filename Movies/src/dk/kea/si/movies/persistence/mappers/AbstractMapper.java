@@ -260,6 +260,7 @@ public abstract class AbstractMapper {
 			insertStatement = getConnection().prepareStatement(
 					insertStatement(), Statement.RETURN_GENERATED_KEYS);
 			doInsert(obj, insertStatement);
+			System.out.println(insertStatement);
 			insertStatement.execute();
 			Long lastInsertId = findLastInsertId(insertStatement);
 			//doAfterInsert(obj, lastInsertId);
@@ -271,37 +272,6 @@ public abstract class AbstractMapper {
 		} finally {
 			closeStatement(insertStatement);
 		}
-	}
-	
-	public long insertTransaction(DomainObject obj) {
-		try {
-			getConnection().setAutoCommit(false);
-			return insert(obj);
-		} catch (SQLException e) {
-			if(getConnection() != null) {
-				try {
-					getConnection().rollback();
-				} catch (SQLException e1) {
-					throw new ApplicationException(e1);
-				}
-			}
-			throw new ApplicationException(e);
-		} catch (ApplicationException ex) {
-			if(getConnection() != null) {
-				try {
-					getConnection().rollback();
-				} catch (SQLException e1) {
-					throw new ApplicationException(ex);
-				}
-			}
-		} finally {
-			try {
-				getConnection().setAutoCommit(true);
-			} catch (SQLException e) {
-				throw new ApplicationException(e);
-			}
-		}
-		return -1L;
 	}
 
 	public int delete(DomainObject obj) {
@@ -353,5 +323,33 @@ public abstract class AbstractMapper {
 	
 	protected AbstractMapper getMapper(Class<? extends Object> domainClass) {
 		return MapperFactory.getInstance().getMapper(domainClass);
+	}
+	
+	protected void startTransaction() throws SQLException {
+		System.out.println("START TRANSACTION");
+		getConnection().setAutoCommit(false);
+	}
+	
+	protected void commitTransaction() throws SQLException {
+		System.out.println("COMMIT TRANSACTION");
+		getConnection().commit();
+	}
+	
+	protected void rollbackTransaction() {
+		System.out.println("ROLLBACK TRANSACTION");
+		try {
+			getConnection().rollback();
+		} catch (SQLException e) {
+			throw new ApplicationException(e);
+		}
+	}
+	
+	protected void endTransaction() {
+		System.out.println("END TRANSACTION");
+		try {
+			getConnection().setAutoCommit(false);
+		} catch (SQLException e) {
+			throw new ApplicationException(e);
+		}
 	}
 }

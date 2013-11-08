@@ -36,7 +36,7 @@ public class MovieCommand extends FrontCommand {
 		} else {
 			movie = new Gson().fromJson(cache.getResponse(), Movie.class);
 		}
-		
+
 		Movie dbMovie = (Movie) getStorage().find(Long.parseLong(id), Movie.class);
 		if(dbMovie == null) {
 			getStorage().insert(movie);

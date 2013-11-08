@@ -61,10 +61,6 @@ public class PersistenceFacade implements Cloneable {
 		return mapperFactory.getMapper(domainObject).insert(domainObject);
 	}
 	
-	public long insertTransaction(DomainObject domainObject) {
-		return mapperFactory.getMapper(domainObject).insertTransaction(domainObject);
-	}
-	
 	/**
 	 * Updates the database record corresponding to the domain object provided in the parameter.
 	 * 

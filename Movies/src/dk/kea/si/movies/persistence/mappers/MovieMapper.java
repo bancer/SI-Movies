@@ -3,10 +3,12 @@ package dk.kea.si.movies.persistence.mappers;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import dk.kea.si.movies.domain.DomainObject;
 import dk.kea.si.movies.domain.Movie;
 import dk.kea.si.movies.domain.Movie.Timeline;
+import dk.kea.si.movies.domain.ReleaseDates;
 import dk.kea.si.movies.util.ApplicationException;
 
 public class MovieMapper extends AbstractMapper {
@@ -38,7 +40,7 @@ public class MovieMapper extends AbstractMapper {
 	protected String insertStatement() {
 		return "INSERT INTO Movie (id, title, year, timeline, runtime,"
 				+ " mpaa_rating, users_rating_score, studio, critics_consensus,"
-				+ " synopsis)" + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				+ " synopsis) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 	}
 
 	@Override
@@ -116,5 +118,35 @@ public class MovieMapper extends AbstractMapper {
 			closeStatement(findStatement);
 		}
 	}
+	
+	public long insert(DomainObject obj) {
+		PreparedStatement insertStatement = null;
+		try {
+			startTransaction();
+			
+			insertStatement = getConnection().prepareStatement(
+					insertStatement());
+			doInsert(obj, insertStatement);
+			System.out.println(insertStatement);
+			insertStatement.execute();
 
+			Movie movie = (Movie)obj;
+			Long lastInsertId = movie.getId();
+			obj.setId(lastInsertId);
+			loadedMap.put(lastInsertId, obj);
+			
+			ReleaseDates releases = movie.getRelease_dates();
+			releases.setMovieId(movie.getId());
+			getMapper(ReleaseDates.class).insert(releases);
+			
+			commitTransaction();
+			return lastInsertId;
+		} catch (Exception e) {
+			rollbackTransaction();
+			throw new ApplicationException(e);
+		} finally {
+			closeStatement(insertStatement);
+			endTransaction();
+		}
+	}
 }
