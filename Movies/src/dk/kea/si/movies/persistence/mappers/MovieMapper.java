@@ -3,10 +3,10 @@ package dk.kea.si.movies.persistence.mappers;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import dk.kea.si.movies.domain.AlternateIds;
 import dk.kea.si.movies.domain.DomainObject;
+import dk.kea.si.movies.domain.Links;
 import dk.kea.si.movies.domain.Movie;
 import dk.kea.si.movies.domain.Movie.Timeline;
 import dk.kea.si.movies.domain.Posters;
@@ -153,6 +153,10 @@ public class MovieMapper extends AbstractMapper {
 			AlternateIds ids = movie.getAlternate_ids();
 			ids.setMovieId(movie.getId());
 			getMapper(AlternateIds.class).insert(ids);
+			
+			Links links = movie.getLinks();
+			links.setMovieId(movie.getId());
+			getMapper(Links.class).insert(links);
 			
 			commitTransaction();
 			return lastInsertId;

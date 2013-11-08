@@ -1,3 +1,4 @@
+TRUNCATE Link;
 TRUNCATE AlternateID;
 TRUNCATE CriticRating;
 TRUNCATE Poster;

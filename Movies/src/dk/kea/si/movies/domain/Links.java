@@ -1,6 +1,6 @@
 package dk.kea.si.movies.domain;
 
-public class Links {
+public class Links extends DomainObject {
 
 	private String self;
 	
@@ -13,6 +13,8 @@ public class Links {
 	private String reviews;
 	
 	private String similar;
+	
+	private long movieId;
 
 	public String getSelf() {
 		return self;
@@ -60,6 +62,14 @@ public class Links {
 
 	public void setSimilar(String similar) {
 		this.similar = similar;
+	}
+
+	public long getMovieId() {
+		return movieId;
+	}
+
+	public void setMovieId(long movieId) {
+		this.movieId = movieId;
 	}
 	
 }
