@@ -1,3 +1,4 @@
+TRUNCATE Genre;
 TRUNCATE Link;
 TRUNCATE AlternateID;
 TRUNCATE CriticRating;

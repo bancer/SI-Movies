@@ -3,6 +3,7 @@ package dk.kea.si.movies.persistence.mappers;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import dk.kea.si.movies.domain.AlternateIds;
 import dk.kea.si.movies.domain.DomainObject;
@@ -126,38 +127,25 @@ public class MovieMapper extends AbstractMapper {
 		PreparedStatement insertStatement = null;
 		try {
 			startTransaction();
-			
+
 			insertStatement = getConnection().prepareStatement(
 					insertStatement());
 			doInsert(obj, insertStatement);
 			System.out.println(insertStatement);
 			insertStatement.execute();
 
-			Movie movie = (Movie)obj;
+			Movie movie = (Movie) obj;
 			Long lastInsertId = movie.getId();
 			obj.setId(lastInsertId);
 			loadedMap.put(lastInsertId, obj);
-			
-			ReleaseDates releases = movie.getRelease_dates();
-			releases.setMovieId(movie.getId());
-			getMapper(ReleaseDates.class).insert(releases);
-			
-			Posters posters = movie.getPosters();
-			posters.setMovieId(movie.getId());
-			getMapper(Posters.class).insert(posters);
-			
-			Ratings ratings = movie.getRatings();
-			ratings.setMovieId(movie.getId());
-			getMapper(Ratings.class).insert(ratings);
-			
-			AlternateIds ids = movie.getAlternate_ids();
-			ids.setMovieId(movie.getId());
-			getMapper(AlternateIds.class).insert(ids);
-			
-			Links links = movie.getLinks();
-			links.setMovieId(movie.getId());
-			getMapper(Links.class).insert(links);
-			
+
+			insertReleases(movie);
+			insertPosters(movie);
+			insertRatings(movie);
+			insertAlternateIds(movie);
+			insertLinks(movie);
+			insertGenres(movie);
+
 			commitTransaction();
 			return lastInsertId;
 		} catch (Exception e) {
@@ -166,6 +154,73 @@ public class MovieMapper extends AbstractMapper {
 		} finally {
 			closeStatement(insertStatement);
 			endTransaction();
+		}
+	}
+
+	private void insertGenres(Movie movie) {
+		GenreMapper genreMapper = new GenreMapper();
+		for (int i = 0; i < movie.getGenres().length; i++) {
+			genreMapper.insert(movie.getId(), movie.getGenres()[i]);
+		}
+	}
+
+	private void insertLinks(Movie movie) {
+		Links links = movie.getLinks();
+		links.setMovieId(movie.getId());
+		getMapper(Links.class).insert(links);
+	}
+
+	private void insertAlternateIds(Movie movie) {
+		AlternateIds ids = movie.getAlternate_ids();
+		ids.setMovieId(movie.getId());
+		getMapper(AlternateIds.class).insert(ids);
+	}
+
+	private void insertRatings(Movie movie) {
+		Ratings ratings = movie.getRatings();
+		ratings.setMovieId(movie.getId());
+		getMapper(Ratings.class).insert(ratings);
+	}
+
+	private void insertPosters(Movie movie) {
+		Posters posters = movie.getPosters();
+		posters.setMovieId(movie.getId());
+		getMapper(Posters.class).insert(posters);
+	}
+
+	private void insertReleases(Movie movie) {
+		ReleaseDates releases = movie.getRelease_dates();
+		releases.setMovieId(movie.getId());
+		getMapper(ReleaseDates.class).insert(releases);
+	}
+	
+	
+	class GenreMapper {
+
+		protected String insertStatement() {
+			return "INSERT INTO Genre (movie_id, name) VALUES (?, ?);";
+		}
+
+		public long insert(long id, String genre) {
+			PreparedStatement insertStatement = null;
+			try {
+				insertStatement = getConnection().prepareStatement(
+						insertStatement(), Statement.RETURN_GENERATED_KEYS);
+				doInsert(id, genre, insertStatement);
+				System.out.println(insertStatement);
+				insertStatement.execute();
+				return findLastInsertId(insertStatement);
+			} catch (SQLException e) {
+				throw new ApplicationException(e);
+			} finally {
+				closeStatement(insertStatement);
+			}
+		}
+
+		protected void doInsert(long movieId, String genre, PreparedStatement s)
+				throws SQLException {
+			s.setLong(1, movieId);
+			s.setString(2, genre);
 		}
 	}
 }
