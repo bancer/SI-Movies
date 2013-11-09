@@ -47,6 +47,8 @@ public class Movie extends DomainObject {
 	
 	private List<Review> reviews;
 	
+	private List<Clip> clips;
+	
 	public Movie() {
 		timeline = Timeline.OTHER;
 	}
@@ -193,6 +195,14 @@ public class Movie extends DomainObject {
 
 	public void setReviews(List<Review> reviews) {
 		this.reviews = reviews;
+	}
+
+	public List<Clip> getClips() {
+		return clips;
+	}
+
+	public void setClips(List<Clip> clips) {
+		this.clips = clips;
 	}
 
 }

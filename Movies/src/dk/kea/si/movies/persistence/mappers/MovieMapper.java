@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import dk.kea.si.movies.domain.AlternateIds;
+import dk.kea.si.movies.domain.Clip;
 import dk.kea.si.movies.domain.Directors;
 import dk.kea.si.movies.domain.DomainObject;
 import dk.kea.si.movies.domain.Links;
@@ -149,6 +150,7 @@ public class MovieMapper extends AbstractMapper {
 			insertGenres(movie);
 			insertDirectors(movie);
 			insertReviews(movie);
+			insertClips(movie);
 
 			commitTransaction();
 			return lastInsertId;
@@ -158,6 +160,15 @@ public class MovieMapper extends AbstractMapper {
 		} finally {
 			closeStatement(insertStatement);
 			endTransaction();
+		}
+	}
+
+	private void insertClips(Movie movie) {
+		ClipMapper clipMapper = (ClipMapper) getMapper(Clip.class);
+		for (int i = 0; i < movie.getClips().size(); i++) {
+			Clip clip = movie.getClips().get(i);
+			clip.setMovieId(movie.getId());
+			clipMapper.insert(clip);
 		}
 	}
 

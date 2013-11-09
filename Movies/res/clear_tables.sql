@@ -1,3 +1,4 @@
+TRUNCATE Clip;
 TRUNCATE Review;
 TRUNCATE MovieDirector;
 DELETE FROM Director;

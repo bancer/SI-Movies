@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import com.google.gson.Gson;
 
 import dk.kea.si.movies.domain.Cache;
+import dk.kea.si.movies.domain.Clips;
 import dk.kea.si.movies.domain.GoogleVideo;
 import dk.kea.si.movies.domain.Movie;
 import dk.kea.si.movies.domain.Reviews;
@@ -26,6 +27,9 @@ public class MovieCommand extends FrontCommand {
 		
 		Reviews reviews = retrieveCachedReviews(id);
 		movie.setReviews(Arrays.asList(reviews.getReviews()));
+		
+		Clips clips = retrieveCachedClips(id);
+		movie.setClips(Arrays.asList(clips.getClips()));
 
 		Movie dbMovie = (Movie) getStorage().find(Long.parseLong(id), Movie.class);
 		if(dbMovie == null) {
@@ -52,18 +56,32 @@ public class MovieCommand extends FrontCommand {
 		forward("/movie.jsp");
 	}
 
+	private Clips retrieveCachedClips(String id) throws MalformedURLException,
+			IOException {
+		Clips result = null;
+		String cacheRequest = "movie/clips/" + id;
+		Cache cache = getStorage().findCache(cacheRequest);
+		if (cache == null || cache.isOlderThan1Week()) {
+			result = RottenTomatoesGateway.findClips(rottenTomatoesApiKey, id);
+			String json = new Gson().toJson(result, Clips.class);
+			refreshCache(cacheRequest, cache, json);
+		} else {
+			result = new Gson().fromJson(cache.getResponse(), Clips.class);
+		}
+		return result;
+	}
+
 	private Reviews retrieveCachedReviews(String id)
 			throws MalformedURLException, IOException {
 		Reviews result = null;
-		Class<Reviews> cachedClass = Reviews.class;
 		String cacheRequest = "movie/reviews/" + id;
 		Cache cache = getStorage().findCache(cacheRequest);
 		if(cache == null || cache.isOlderThan24Hours()) {
 			result = RottenTomatoesGateway.findReviews(rottenTomatoesApiKey, id);
-			String json = new Gson().toJson(result, cachedClass);
+			String json = new Gson().toJson(result, Reviews.class);
 			refreshCache(cacheRequest, cache, json);
 		} else {
-			result = new Gson().fromJson(cache.getResponse(), cachedClass);
+			result = new Gson().fromJson(cache.getResponse(), Reviews.class);
 		}
 		return result;
 	}
@@ -71,15 +89,14 @@ public class MovieCommand extends FrontCommand {
 	private Movie retrieveCachedMovie(String id) throws MalformedURLException,
 			IOException {
 		Movie result = null;
-		Class<Movie> cachedClass = Movie.class;
 		String cacheRequest = "movie/" + id;
 		Cache cache = getStorage().findCache(cacheRequest);
 		if(cache == null || cache.isOlderThan1Week()) {
 			result = RottenTomatoesGateway.findMovie(rottenTomatoesApiKey, id);
-			String json = new Gson().toJson(result, cachedClass);
+			String json = new Gson().toJson(result, Movie.class);
 			refreshCache(cacheRequest, cache, json);	
 		} else {
-			result = new Gson().fromJson(cache.getResponse(), cachedClass);
+			result = new Gson().fromJson(cache.getResponse(), Movie.class);
 		}
 		return result;
 	}

@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 import com.google.gson.Gson;
 
+import dk.kea.si.movies.domain.Clips;
 import dk.kea.si.movies.domain.Movie;
 import dk.kea.si.movies.domain.MovieSearchResults;
 import dk.kea.si.movies.domain.Reviews;
@@ -46,9 +47,18 @@ public class RottenTomatoesGateway {
 	private static final String OPENING_TEMPLATE = ROOT_URL
 			+ "lists/movies/opening.json?apikey=%s&limit=%s";
 
+	/**
+	 * @see http://developer.rottentomatoes.com/docs/read/json/v10/Movie_Reviews
+	 */
 	private static final String REVIEWS_TEMPLATE = ROOT_URL
 			+ "movies/%s/reviews.json?apikey=%s"
 			+ "&review_type=%s&page_limit=%s&page=%s&country=%s";
+	
+	/**
+	 * @see http://developer.rottentomatoes.com/docs/read/json/v10/Movie_Clips
+	 */
+	private static final String CLIPS_TEMPLATE = ROOT_URL
+			+ "movies/%s/clips.json?apikey=%s";
 
 	public static MovieSearchResults searchMovies(String apiKey, String search,
 			String page) throws MalformedURLException, IOException {
@@ -60,8 +70,6 @@ public class RottenTomatoesGateway {
 	public static Movie findMovie(String apiKey, String id)
 			throws MalformedURLException, IOException {
 		String url = String.format(MOVIE_TEMPLATE, id, apiKey);
-		// TODO: check if there is a fresh cache of this url in the database
-		// if not then send the request to RottenTomatoes
 		String content = readUrlContents(url);
 		Gson gson = new Gson();
 		return gson.fromJson(content, Movie.class);
@@ -102,6 +110,14 @@ public class RottenTomatoesGateway {
 		String content = readUrlContents(url);
 		Gson gson = new Gson();
 		return gson.fromJson(content, Reviews.class);
+	}
+	
+	public static Clips findClips(String apiKey, String movieId)
+			throws MalformedURLException, IOException {
+		String url = String.format(CLIPS_TEMPLATE, movieId, apiKey);
+		String content = readUrlContents(url);
+		Gson gson = new Gson();
+		return gson.fromJson(content, Clips.class);
 	}
 
 	private static String readUrlContents(String url) throws IOException,
