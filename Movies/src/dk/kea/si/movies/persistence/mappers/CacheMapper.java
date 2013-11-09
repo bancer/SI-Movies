@@ -33,13 +33,13 @@ public class CacheMapper extends AbstractMapper {
 
 	@Override
 	protected String updateStatement() {
-		return "UPDATE Cache SET hash =?, request =?, response =?, time =?"
+		return "UPDATE `Cache` SET hash =?, request =?, response =?, time =?"
 				+ " WHERE id=?";
 	}
 
 	@Override
 	protected String insertStatement() {
-		return "INSERT INTO Cache (hash, request, response)"
+		return "INSERT INTO `Cache` (hash, request, response)"
 				+ " VALUES (?, ?, ?)";
 	}
 

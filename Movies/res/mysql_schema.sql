@@ -14,10 +14,10 @@ DROP TABLE IF EXISTS `movies`.`Movie` ;
 CREATE TABLE IF NOT EXISTS `movies`.`Movie` (
   `id` INT NOT NULL,
   `title` VARCHAR(255) NOT NULL,
-  `year` YEAR NOT NULL,
-  `timeline` ENUM('in theaters', 'opening', 'coming soon', 'other') NOT NULL,
+  `year` YEAR NULL,
+  `timeline` ENUM('IN_THEATERS', 'OPENING', 'COMING_SOON', 'OTHER') NOT NULL,
   `runtime` INT NOT NULL,
-  `mpaa_rating` VARCHAR(5) NULL,
+  `mpaa_rating` VARCHAR(10) NULL,
   `users_rating_score` FLOAT NULL,
   `studio` VARCHAR(255) NULL,
   `critics_consensus` TEXT NULL,
@@ -34,7 +34,7 @@ DROP TABLE IF EXISTS `movies`.`Genre` ;
 CREATE TABLE IF NOT EXISTS `movies`.`Genre` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `movie_id` INT NOT NULL,
-  `name` ENUM('Action & Adventure', 'Comedy', 'Drama') NOT NULL,
+  `name` ENUM('Action & Adventure', 'Adult', 'Animation', 'Art House & International','Classics','Comedy','Cult Movies','Documentary','Drama','Faith & Spirituality','Gay & Lesbian','Horror','Kids & Family','Musical & Performing Arts','Mystery & Suspense','Romance','Science Fiction & Fantasy','Special Interest','Sports & Fitness','Television','Western','Anime & Manga') NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_Genre_Movie1_idx` (`movie_id` ASC),
   UNIQUE INDEX `idx_Name_Movie` (`movie_id` ASC, `name` ASC),
@@ -54,7 +54,7 @@ DROP TABLE IF EXISTS `movies`.`CriticRating` ;
 CREATE TABLE IF NOT EXISTS `movies`.`CriticRating` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `movie_id` INT NOT NULL,
-  `type` ENUM('Critics', 'Audience') NOT NULL,
+  `type` ENUM('CRITICS', 'AUDIENCE') NOT NULL,
   `score` INT NOT NULL,
   `rating` VARCHAR(255) NULL,
   PRIMARY KEY (`id`),
@@ -76,7 +76,7 @@ DROP TABLE IF EXISTS `movies`.`Poster` ;
 CREATE TABLE IF NOT EXISTS `movies`.`Poster` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `movie_id` INT NOT NULL,
-  `type` ENUM('thumbnail', 'profile', 'detailed', 'original') NOT NULL,
+  `type` ENUM('THUMBNAIL', 'PROFILE', 'DETAILED', 'ORIGINAL') NOT NULL,
   `url` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_Poster_Movie1_idx` (`movie_id` ASC),
@@ -168,7 +168,7 @@ DROP TABLE IF EXISTS `movies`.`Link` ;
 CREATE TABLE IF NOT EXISTS `movies`.`Link` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `movie_id` INT NOT NULL,
-  `type` ENUM('self', 'alternate', 'cast', 'clips', 'reviews', 'similar', 'canonical') NOT NULL,
+  `type` ENUM('SELF', 'ALTERNATE', 'CAST', 'CLIPS', 'REVIEWS', 'SIMILAR') NOT NULL,
   `url` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_Link_Movie1_idx` (`movie_id` ASC),
@@ -299,7 +299,7 @@ DROP TABLE IF EXISTS `movies`.`Release` ;
 CREATE TABLE IF NOT EXISTS `movies`.`Release` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `movie_id` INT NOT NULL,
-  `type` ENUM('theater', 'dvd') NOT NULL,
+  `type` ENUM('THEATER', 'DVD') NOT NULL,
   `release_date` DATE NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_Release_Movie1_idx` (`movie_id` ASC),

@@ -30,7 +30,7 @@ public class ReviewMapper extends AbstractMapper {
 
 	@Override
 	protected String insertStatement() {
-		return "INSERT INTO Review (movie_id, critic, date, freshness,"
+		return "INSERT INTO `Review` (movie_id, critic, date, freshness,"
 				+ " publication, quote, link, country)"
 				+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
 	}

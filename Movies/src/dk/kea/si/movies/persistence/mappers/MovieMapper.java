@@ -86,8 +86,15 @@ public class MovieMapper extends AbstractMapper {
 		Movie movie = (Movie) o;
 		s.setLong(1, movie.getId());
 		s.setString(2, movie.getTitle());
+		if(movie.getYear().equals("")) {
+			movie.setYear("0000");
+		}
 		s.setString(3, movie.getYear());
 		s.setString(4, movie.getTimeline().toString());
+		System.out.println("runtime:"+movie.getRuntime());
+		if(!movie.getRuntime().matches("\\d+")) { // if string is not integer
+			movie.setRuntime("0");
+		}
 		s.setInt(5, Integer.parseInt(movie.getRuntime()));
 		s.setString(6, movie.getMpaa_rating());
 		s.setFloat(7, movie.getUsersRatingScore());
@@ -205,17 +212,20 @@ public class MovieMapper extends AbstractMapper {
 	private void insertDirectors(Movie movie) {
 		DirectorsMapper directorsMapper = (DirectorsMapper) getMapper(Directors.class);
 		MovieDirectorMapper movieDirectorMapper = new MovieDirectorMapper();
-		for (int i = 0; i < movie.getAbridged_directors().length; i++) {
-			Directors directors = movie.getAbridged_directors()[i];
-			Directors storedDirectors = directorsMapper.findByName(directors
-					.getName());
-			if (storedDirectors == null) {
-				long lastId = directorsMapper.insert(directors);
-				directors.setId(lastId);
-			} else {
-				directors = storedDirectors;
+		Directors[] abridgedDirectors = movie.getAbridged_directors();
+		if (abridgedDirectors != null) {
+			for (int i = 0; i < abridgedDirectors.length; i++) {
+				Directors directors = abridgedDirectors[i];
+				Directors storedDirectors = directorsMapper
+						.findByName(directors.getName());
+				if (storedDirectors == null) {
+					long lastId = directorsMapper.insert(directors);
+					directors.setId(lastId);
+				} else {
+					directors = storedDirectors;
+				}
+				movieDirectorMapper.insert(movie.getId(), directors.getId());
 			}
-			movieDirectorMapper.insert(movie.getId(), directors.getId());
 		}
 	}
 
@@ -234,8 +244,10 @@ public class MovieMapper extends AbstractMapper {
 
 	private void insertAlternateIds(Movie movie) {
 		AlternateIds ids = movie.getAlternate_ids();
-		ids.setMovieId(movie.getId());
-		getMapper(AlternateIds.class).insert(ids);
+		if (ids != null) {
+			ids.setMovieId(movie.getId());
+			getMapper(AlternateIds.class).insert(ids);
+		}
 	}
 
 	private void insertRatings(Movie movie) {
@@ -259,7 +271,7 @@ public class MovieMapper extends AbstractMapper {
 	class GenreMapper {
 
 		protected String insertStatement() {
-			return "INSERT INTO Genre (movie_id, name) VALUES (?, ?);";
+			return "INSERT INTO `Genre` (movie_id, name) VALUES (?, ?);";
 		}
 
 		public long insert(long id, String genre) {
@@ -288,7 +300,7 @@ public class MovieMapper extends AbstractMapper {
 	class MovieDirectorMapper {
 
 		protected String insertStatement() {
-			return "INSERT INTO MovieDirector (director_id, movie_id)"
+			return "INSERT INTO `MovieDirector` (director_id, movie_id)"
 					+ " VALUES (?, ?);";
 		}
 
