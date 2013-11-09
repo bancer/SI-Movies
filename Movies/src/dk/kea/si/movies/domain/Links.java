@@ -12,6 +12,8 @@ public class Links extends DomainObject {
 	
 	private String reviews;
 	
+	private String rel;
+	
 	/**
 	 * This field holds a link to a single movie review. It is used by Review
 	 * class.
@@ -84,6 +86,14 @@ public class Links extends DomainObject {
 
 	public void setReview(String review) {
 		this.review = review;
+	}
+
+	public String getRel() {
+		return rel;
+	}
+
+	public void setRel(String rel) {
+		this.rel = rel;
 	}
 	
 }

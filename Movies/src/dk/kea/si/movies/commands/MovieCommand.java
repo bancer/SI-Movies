@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 
 import dk.kea.si.movies.domain.Cache;
 import dk.kea.si.movies.domain.Clips;
+import dk.kea.si.movies.domain.CompleteCast;
 import dk.kea.si.movies.domain.GoogleVideo;
 import dk.kea.si.movies.domain.Movie;
 import dk.kea.si.movies.domain.Reviews;
@@ -30,6 +31,9 @@ public class MovieCommand extends FrontCommand {
 		
 		Clips clips = retrieveCachedClips(id);
 		movie.setClips(Arrays.asList(clips.getClips()));
+		
+		CompleteCast cast = retrieveCachedCast(id);
+		movie.setFullCast(cast.getCast());
 
 		Movie dbMovie = (Movie) getStorage().find(Long.parseLong(id), Movie.class);
 		if(dbMovie == null) {
@@ -56,12 +60,28 @@ public class MovieCommand extends FrontCommand {
 		forward("/movie.jsp");
 	}
 
+	private CompleteCast retrieveCachedCast(String id)
+			throws MalformedURLException, IOException {
+		CompleteCast result = null;
+		String cacheRequest = "movie/cast/" + id;
+		Cache cache = getStorage().findCache(cacheRequest);
+		if (cache == null) {
+			result = RottenTomatoesGateway.findCast(rottenTomatoesApiKey, id);
+			String json = new Gson().toJson(result, CompleteCast.class);
+			refreshCache(cacheRequest, cache, json);
+		} else {
+			result = new Gson().fromJson(cache.getResponse(),
+					CompleteCast.class);
+		}
+		return result;
+	}
+
 	private Clips retrieveCachedClips(String id) throws MalformedURLException,
 			IOException {
 		Clips result = null;
 		String cacheRequest = "movie/clips/" + id;
 		Cache cache = getStorage().findCache(cacheRequest);
-		if (cache == null || cache.isOlderThan1Week()) {
+		if (cache == null) {
 			result = RottenTomatoesGateway.findClips(rottenTomatoesApiKey, id);
 			String json = new Gson().toJson(result, Clips.class);
 			refreshCache(cacheRequest, cache, json);

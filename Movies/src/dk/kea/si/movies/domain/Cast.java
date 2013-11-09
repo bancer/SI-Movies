@@ -1,10 +1,8 @@
 package dk.kea.si.movies.domain;
 
-public class Cast {
+public class Cast extends DomainObject {
 
 	private String name;
-	
-	private String id;
 	
 	private String[] characters;
 
@@ -14,14 +12,6 @@ public class Cast {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public String[] getCharacters() {

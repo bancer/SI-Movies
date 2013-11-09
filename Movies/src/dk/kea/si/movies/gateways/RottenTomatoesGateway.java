@@ -10,6 +10,7 @@ import java.util.Scanner;
 import com.google.gson.Gson;
 
 import dk.kea.si.movies.domain.Clips;
+import dk.kea.si.movies.domain.CompleteCast;
 import dk.kea.si.movies.domain.Movie;
 import dk.kea.si.movies.domain.MovieSearchResults;
 import dk.kea.si.movies.domain.Reviews;
@@ -59,6 +60,12 @@ public class RottenTomatoesGateway {
 	 */
 	private static final String CLIPS_TEMPLATE = ROOT_URL
 			+ "movies/%s/clips.json?apikey=%s";
+	
+	/**
+	 * @see http://developer.rottentomatoes.com/docs/read/json/v10/Movie_Cast
+	 */
+	private static final String CAST_TEMPLATE = ROOT_URL
+			+ "movies/%s/cast.json?apikey=%s";
 
 	public static MovieSearchResults searchMovies(String apiKey, String search,
 			String page) throws MalformedURLException, IOException {
@@ -118,6 +125,14 @@ public class RottenTomatoesGateway {
 		String content = readUrlContents(url);
 		Gson gson = new Gson();
 		return gson.fromJson(content, Clips.class);
+	}
+	
+	public static CompleteCast findCast(String apiKey, String movieId)
+			throws MalformedURLException, IOException {
+		String url = String.format(CAST_TEMPLATE, movieId, apiKey);
+		String content = readUrlContents(url);
+		Gson gson = new Gson();
+		return gson.fromJson(content, CompleteCast.class);
 	}
 
 	private static String readUrlContents(String url) throws IOException,

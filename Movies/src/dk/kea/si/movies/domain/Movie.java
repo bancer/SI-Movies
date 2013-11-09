@@ -33,6 +33,8 @@ public class Movie extends DomainObject {
 	
 	private Cast[] abridged_cast;
 	
+	private Cast[] fullCast;
+	
 	private Directors[] abridged_directors;
 	
 	private String studio;
@@ -203,6 +205,14 @@ public class Movie extends DomainObject {
 
 	public void setClips(List<Clip> clips) {
 		this.clips = clips;
+	}
+
+	public Cast[] getFullCast() {
+		return fullCast;
+	}
+
+	public void setFullCast(Cast[] fullCast) {
+		this.fullCast = fullCast;
 	}
 
 }

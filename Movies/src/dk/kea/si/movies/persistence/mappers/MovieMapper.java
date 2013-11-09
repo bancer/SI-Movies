@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import dk.kea.si.movies.domain.AlternateIds;
+import dk.kea.si.movies.domain.Cast;
 import dk.kea.si.movies.domain.Clip;
 import dk.kea.si.movies.domain.Directors;
 import dk.kea.si.movies.domain.DomainObject;
@@ -151,6 +152,7 @@ public class MovieMapper extends AbstractMapper {
 			insertDirectors(movie);
 			insertReviews(movie);
 			insertClips(movie);
+			insertCast(movie);
 
 			commitTransaction();
 			return lastInsertId;
@@ -160,6 +162,25 @@ public class MovieMapper extends AbstractMapper {
 		} finally {
 			closeStatement(insertStatement);
 			endTransaction();
+		}
+	}
+
+	private void insertCast(Movie movie) {
+		CastMapper castMapper = (CastMapper) getMapper(Cast.class);
+		CharacterMapper characterMapper = new CharacterMapper();
+		for (int i = 0; i < movie.getFullCast().length; i++) {
+			Cast cast = movie.getFullCast()[i];
+			Cast storedCast = castMapper.findByName(cast.getName());
+			if (storedCast == null) {
+				castMapper.insert(cast);
+			} else {
+				cast = storedCast;
+			}
+			String[] characters = movie.getFullCast()[i].getCharacters();
+			for (int j = 0; j < characters.length; j++) {
+				characterMapper.insert(movie.getId(), cast.getId(),
+						characters[j]);
+			}
 		}
 	}
 
@@ -291,6 +312,37 @@ public class MovieMapper extends AbstractMapper {
 				PreparedStatement s) throws SQLException {
 			s.setLong(1, directorId);
 			s.setLong(2, movieId);
+		}
+	}
+
+	class CharacterMapper {
+
+		protected String insertStatement() {
+			return "INSERT INTO `Character` (actor_id, movie_id, name)"
+					+ " VALUES (?, ?, ?);";
+		}
+
+		public long insert(long movieId, long actorId, String name) {
+			PreparedStatement insertStatement = null;
+			try {
+				insertStatement = getConnection().prepareStatement(
+						insertStatement(), Statement.RETURN_GENERATED_KEYS);
+				doInsert(movieId, actorId, name, insertStatement);
+				System.out.println(insertStatement);
+				insertStatement.execute();
+				return findLastInsertId(insertStatement);
+			} catch (SQLException e) {
+				throw new ApplicationException(e);
+			} finally {
+				closeStatement(insertStatement);
+			}
+		}
+
+		protected void doInsert(long movieId, long actorId, String name,
+				PreparedStatement s) throws SQLException {
+			s.setLong(1, actorId);
+			s.setLong(2, movieId);
+			s.setString(3, name);
 		}
 	}
 }
