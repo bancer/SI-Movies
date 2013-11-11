@@ -26,7 +26,7 @@ public class CastMapper extends AbstractMapper {
 
 	protected String findByNameStatement() {
 		return "SELECT " + COLUMNS + " FROM Actor AS Cast"
-				+ " WHERE Cast.name=?" + " LIMIT 1";
+				+ " WHERE Cast.name=?" + " LIMIT 1;";
 	}
 
 	@Override
@@ -87,6 +87,7 @@ public class CastMapper extends AbstractMapper {
 		try {
 			statement = getConnection().prepareStatement(findByNameStatement());
 			statement.setString(1, name);
+			System.out.println(statement);
 			ResultSet rs = statement.executeQuery();
 			if (rs.next()) {
 				return (Cast) load(rs);

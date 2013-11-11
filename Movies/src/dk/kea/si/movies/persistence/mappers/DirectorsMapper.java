@@ -20,7 +20,7 @@ public class DirectorsMapper extends AbstractMapper {
 	
 	protected String findByNameStatement() {
 		return "SELECT " + COLUMNS + " FROM Director AS Director"
-				+ " WHERE Director.name=?" + " LIMIT 1";
+				+ " WHERE Director.name=?" + " LIMIT 1;";
 	}
 
 	@Override
@@ -86,6 +86,7 @@ public class DirectorsMapper extends AbstractMapper {
 		try {
 			statement = getConnection().prepareStatement(findByNameStatement());
 			statement.setString(1, name);
+			System.out.println(statement);
 			ResultSet rs = statement.executeQuery();
 			if(rs.next()) {
 				return (Directors) load(rs);

@@ -29,7 +29,7 @@ public class MovieMapper extends AbstractMapper {
 	@Override
 	protected String findStatement() {
 		return "SELECT " + COLUMNS + " FROM Movie AS Movie"
-				+ " WHERE Movie.id=?" + " LIMIT 1";
+				+ " WHERE Movie.id=?" + " LIMIT 1;";
 	}
 
 	@Override
@@ -91,7 +91,6 @@ public class MovieMapper extends AbstractMapper {
 		}
 		s.setString(3, movie.getYear());
 		s.setString(4, movie.getTimeline().toString());
-		System.out.println("runtime:"+movie.getRuntime());
 		if(!movie.getRuntime().matches("\\d+")) { // if string is not integer
 			movie.setRuntime("0");
 		}
