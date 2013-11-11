@@ -1,6 +1,6 @@
 package dk.kea.si.movies.domain;
 
-public class Links {
+public class Links extends DomainObject {
 
 	private String self;
 	
@@ -12,7 +12,17 @@ public class Links {
 	
 	private String reviews;
 	
+	private String rel;
+	
+	/**
+	 * This field holds a link to a single movie review. It is used by Review
+	 * class.
+	 */
+	private String review;
+	
 	private String similar;
+	
+	private long movieId;
 
 	public String getSelf() {
 		return self;
@@ -60,6 +70,30 @@ public class Links {
 
 	public void setSimilar(String similar) {
 		this.similar = similar;
+	}
+
+	public long getMovieId() {
+		return movieId;
+	}
+
+	public void setMovieId(long movieId) {
+		this.movieId = movieId;
+	}
+
+	public String getReview() {
+		return review;
+	}
+
+	public void setReview(String review) {
+		this.review = review;
+	}
+
+	public String getRel() {
+		return rel;
+	}
+
+	public void setRel(String rel) {
+		this.rel = rel;
 	}
 	
 }

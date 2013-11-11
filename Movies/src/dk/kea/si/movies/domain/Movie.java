@@ -1,8 +1,12 @@
 package dk.kea.si.movies.domain;
 
-public class Movie {
+import java.util.List;
+
+public class Movie extends DomainObject {
 	
-	private String id;
+	public enum Timeline {
+		IN_THEATERS, COMING_SOON, OPENING, OTHER
+	}
 	
 	private String title;
 	
@@ -12,6 +16,9 @@ public class Movie {
 	
 	private String mpaa_rating;
 	
+	// TODO: convert runtime to integer type. It will cause Gson
+	// NumberFormatException. See how to handle that in the link below.
+	// http://stackoverflow.com/questions/8863429/how-to-handle-a-numberformatexception-with-gson-in-deserialization-a-json-respon
 	private String runtime;
 	
 	private String critics_consensus;
@@ -26,6 +33,8 @@ public class Movie {
 	
 	private Cast[] abridged_cast;
 	
+	private Cast[] fullCast;
+	
 	private Directors[] abridged_directors;
 	
 	private String studio;
@@ -33,13 +42,17 @@ public class Movie {
 	private AlternateIds alternate_ids;
 	
 	private Links links;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
+	
+	private Timeline timeline;
+	
+	private float usersRatingScore;
+	
+	private List<Review> reviews;
+	
+	private List<Clip> clips;
+	
+	public Movie() {
+		timeline = Timeline.OTHER;
 	}
 
 	public String getTitle() {
@@ -160,6 +173,46 @@ public class Movie {
 
 	public void setStudio(String studio) {
 		this.studio = studio;
+	}
+
+	public Timeline getTimeline() {
+		return timeline;
+	}
+
+	public void setTimeline(Timeline timeline) {
+		this.timeline = timeline;
+	}
+
+	public float getUsersRatingScore() {
+		return usersRatingScore;
+	}
+
+	public void setUsersRatingScore(float usersRatingScore) {
+		this.usersRatingScore = usersRatingScore;
+	}
+
+	public List<Review> getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(List<Review> reviews) {
+		this.reviews = reviews;
+	}
+
+	public List<Clip> getClips() {
+		return clips;
+	}
+
+	public void setClips(List<Clip> clips) {
+		this.clips = clips;
+	}
+
+	public Cast[] getFullCast() {
+		return fullCast;
+	}
+
+	public void setFullCast(Cast[] fullCast) {
+		this.fullCast = fullCast;
 	}
 
 }

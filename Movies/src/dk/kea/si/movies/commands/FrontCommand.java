@@ -8,6 +8,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dk.kea.si.movies.persistence.core.PersistenceFacade;
+
 
 public abstract class FrontCommand {
 
@@ -44,5 +46,8 @@ public abstract class FrontCommand {
 		RequestDispatcher dispatcher = context.getRequestDispatcher(target);
 		dispatcher.forward(request, response);
 	}
-
+	
+	protected PersistenceFacade getStorage() {
+		return PersistenceFacade.getInstance();
+	}
 }

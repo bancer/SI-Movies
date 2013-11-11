@@ -1,6 +1,7 @@
 package dk.kea.si.movies.domain;
 
-public class OpenID {
+
+public class OpenID extends DomainObject {
 
 	private String identifier;
 	

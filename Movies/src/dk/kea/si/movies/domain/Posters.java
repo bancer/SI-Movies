@@ -1,6 +1,6 @@
 package dk.kea.si.movies.domain;
 
-public class Posters {
+public class Posters extends DomainObject {
 
 	private String thumbnail;
 	
@@ -9,6 +9,8 @@ public class Posters {
 	private String detailed;
 	
 	private String original;
+	
+	private long movieId;
 
 	public String getThumbnail() {
 		return thumbnail;
@@ -40,5 +42,13 @@ public class Posters {
 
 	public void setOriginal(String original) {
 		this.original = original;
+	}
+
+	public long getMovieId() {
+		return movieId;
+	}
+
+	public void setMovieId(long movieId) {
+		this.movieId = movieId;
 	}
 }

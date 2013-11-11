@@ -1,14 +1,16 @@
 package dk.kea.si.movies.domain;
 
-public class Ratings {
+public class Ratings extends DomainObject {
 
 	private String critics_rating;
 	
-	private String criticts_score;
+	private int critics_score;
 	
 	private String audience_rating;
 	
-	private String audience_score;
+	private int audience_score;
+	
+	private long movieId;
 
 	public String getCritics_rating() {
 		return critics_rating;
@@ -18,12 +20,12 @@ public class Ratings {
 		this.critics_rating = critics_rating;
 	}
 
-	public String getCriticts_score() {
-		return criticts_score;
+	public int getCritics_score() {
+		return critics_score;
 	}
 
-	public void setCriticts_score(String criticts_score) {
-		this.criticts_score = criticts_score;
+	public void setCritics_score(int criticts_score) {
+		this.critics_score = criticts_score;
 	}
 
 	public String getAudience_rating() {
@@ -34,12 +36,20 @@ public class Ratings {
 		this.audience_rating = audience_rating;
 	}
 
-	public String getAudience_score() {
+	public int getAudience_score() {
 		return audience_score;
 	}
 
-	public void setAudience_score(String audience_score) {
+	public void setAudience_score(int audience_score) {
 		this.audience_score = audience_score;
+	}
+
+	public long getMovieId() {
+		return movieId;
+	}
+
+	public void setMovieId(long movieId) {
+		this.movieId = movieId;
 	}
 	
 }
