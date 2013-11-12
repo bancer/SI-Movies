@@ -1,0 +1,25 @@
+DELIMITER $$
+USE movies$$
+
+CREATE PROCEDURE UpdateMovieUsersRatingScoreProcedure(IN movieid INT)
+BEGIN
+	DECLARE ratingAvg FLOAT;
+	SET ratingAvg = (
+		SELECT AVG(`value`) FROM UserRating 
+		WHERE movie_id = movieid
+	);
+	UPDATE Movie 
+	SET users_rating_score = ratingAvg
+	WHERE id = movieid;
+END$$
+
+DELIMITER ;
+CREATE TRIGGER UserRatingInsertTrigger 
+AFTER INSERT ON UserRating
+FOR EACH ROW 
+CALL UpdateMovieUsersRatingScoreProcedure(NEW.movie_id);
+
+CREATE TRIGGER UserRatingUpdateTrigger 
+AFTER UPDATE ON UserRating
+FOR EACH ROW 
+CALL UpdateMovieUsersRatingScoreProcedure(NEW.movie_id);
