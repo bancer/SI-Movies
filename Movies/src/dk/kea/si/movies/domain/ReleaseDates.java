@@ -9,8 +9,8 @@ public class ReleaseDates extends DomainObject {
 	private long movieId;
 	
 	public ReleaseDates() {
-		dvd = "0000-00-00";
-		theater = "0000-00-00";
+		dvd = "1001-01-01";
+		theater = "1001-01-01";
 	}
 
 	public String getDvd() {
