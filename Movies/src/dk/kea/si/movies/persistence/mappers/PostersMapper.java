@@ -9,8 +9,18 @@ import dk.kea.si.movies.domain.Posters;
 
 public class PostersMapper extends AbstractMapper {
 
-	public static final String COLUMNS = "Poster.id, Poster.movie_id,"
-			+ " Poster.type, Poster.url";
+	public static final String ALIAS = "Poster";
+
+	public static final String ID = ALIAS + ".id";
+
+	public static final String MOVIE_ID = ALIAS + ".movie_id";
+
+	private static final String TYPE = ALIAS + ".type";
+
+	private static final String URL = ALIAS + ".url";
+	
+	public static final String COLUMNS = ID + ", " + MOVIE_ID + "," + " "
+			+ TYPE + ", " + URL;
 
 	@Override
 	protected String findStatement() {

@@ -26,12 +26,12 @@ public class MysqlConnection {
 	/**
 	 * The database user on whose behalf the connection is being made.
 	 */
-	private static final String DB_USER = "root";
+	private static final String DB_USER = "moviehunter";
 
 	/**
 	 * The user's password.
 	 */
-	private static final String DB_PASSWORD = "admin";
+	private static final String DB_PASSWORD = "1234";
 	
 	/**
 	 * Instance of the MysqlConnection object.

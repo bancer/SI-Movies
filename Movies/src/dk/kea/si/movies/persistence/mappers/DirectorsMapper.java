@@ -9,18 +9,24 @@ import dk.kea.si.movies.domain.DomainObject;
 import dk.kea.si.movies.util.ApplicationException;
 
 public class DirectorsMapper extends AbstractMapper {
-	
-	public static final String COLUMNS = "Director.id, Director.name";
+
+	public static final String ALIAS = "Director";
+
+	public static final String ID = ALIAS + ".id";
+
+	private static final String NAME = ALIAS + ".name";
+
+	public static final String COLUMNS = ID + ", " + NAME;
 
 	@Override
 	protected String findStatement() {
-		return "SELECT " + COLUMNS + " FROM Director AS Director"
-				+ " WHERE Director.id=?" + " LIMIT 1";
+		return "SELECT " + COLUMNS + " FROM Director AS " + ALIAS + " WHERE "
+				+ ID + "=?" + " LIMIT 1";
 	}
-	
+
 	protected String findByNameStatement() {
-		return "SELECT " + COLUMNS + " FROM Director AS Director"
-				+ " WHERE Director.name=?" + " LIMIT 1;";
+		return "SELECT " + COLUMNS + " FROM Director AS " + ALIAS + " WHERE "
+				+ NAME + "=?" + " LIMIT 1;";
 	}
 
 	@Override
@@ -49,8 +55,8 @@ public class DirectorsMapper extends AbstractMapper {
 	@Override
 	protected DomainObject doLoad(Long id, ResultSet rs) throws SQLException {
 		Directors directors = new Directors();
-		directors.setId(rs.getLong("Director.id"));
-		directors.setName(rs.getString("Director.name"));
+		directors.setId(rs.getLong(ID));
+		directors.setName(rs.getString(NAME));
 		return directors;
 	}
 
@@ -88,7 +94,7 @@ public class DirectorsMapper extends AbstractMapper {
 			statement.setString(1, name);
 			System.out.println(statement);
 			ResultSet rs = statement.executeQuery();
-			if(rs.next()) {
+			if (rs.next()) {
 				return (Directors) load(rs);
 			} else {
 				return null;

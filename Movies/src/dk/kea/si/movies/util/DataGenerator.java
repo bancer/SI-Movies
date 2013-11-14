@@ -74,10 +74,10 @@ public class DataGenerator {
 	 */
 	public static void main(String[] args) {
 		DataFactory df = new DataFactory();
-		int startId = 900004743;
+		int startId = 900064098;
 		int alternateIdStart = startId - 400000000;
 		int size = 900100000-startId;
-		int actorStartId = 900050024;
+		int actorStartId = 900674321;
 		for (int id = startId; id < startId + size; id++) {
 
 			Date minDate = df.getDate(1927, 1, 1);

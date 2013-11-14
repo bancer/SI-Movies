@@ -11,8 +11,18 @@ import dk.kea.si.movies.util.ApplicationException;
 
 public class CacheMapper extends AbstractMapper {
 
-	public static final String COLUMNS = "Cache.id, Cache.hash,"
-			+ " Cache.request, Cache.response, Cache.time";
+	private static final String ID = "Cache.id";
+
+	private static final String HASH = "Cache.hash";
+
+	private static final String REQUEST = "Cache.request";
+
+	private static final String RESPONSE = "Cache.response";
+
+	private static final String TIME = "Cache.time";
+
+	public static final String COLUMNS = ID + ", " + HASH + ", " + REQUEST
+			+ ", " + RESPONSE + ", " + TIME;
 
 	@Override
 	protected String findStatement() {
@@ -27,8 +37,8 @@ public class CacheMapper extends AbstractMapper {
 	}
 
 	protected String findByHashStatement() {
-		return "SELECT " + COLUMNS + " FROM Cache AS Cache"
-				+ " WHERE Cache.hash=?";
+		return "SELECT " + COLUMNS + " FROM Cache AS Cache" + " WHERE " + HASH
+				+ "=?";
 	}
 
 	@Override
@@ -52,11 +62,11 @@ public class CacheMapper extends AbstractMapper {
 	@Override
 	protected DomainObject doLoad(Long id, ResultSet rs) throws SQLException {
 		Cache cache = new Cache();
-		cache.setId(rs.getLong("Cache.id"));
-		cache.setHash(rs.getInt("Cache.hash"));
-		cache.setRequest(rs.getString("Cache.request"));
-		cache.setResponse(rs.getString("Cache.response"));
-		cache.setTimestamp((long)(rs.getTimestamp("Cache.time").getTime() / 1000L));
+		cache.setId(rs.getLong(ID));
+		cache.setHash(rs.getInt(HASH));
+		cache.setRequest(rs.getString(REQUEST));
+		cache.setResponse(rs.getString(RESPONSE));
+		cache.setTimestamp((long) (rs.getTimestamp(TIME).getTime() / 1000L));
 		return cache;
 	}
 
@@ -98,6 +108,7 @@ public class CacheMapper extends AbstractMapper {
 		try {
 			statement = getConnection().prepareStatement(findByHashStatement());
 			statement.setInt(1, request.hashCode());
+			System.out.println(statement);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
 				Cache cache = (Cache) load(rs);

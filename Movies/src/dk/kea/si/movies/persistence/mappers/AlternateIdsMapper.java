@@ -9,6 +9,21 @@ import dk.kea.si.movies.domain.DomainObject;
 
 public class AlternateIdsMapper extends AbstractMapper {
 
+	public static final String ALIAS = "AlternateId";
+
+	private static final String IMDB = "IMDB";
+
+	public static final String ID = ALIAS + ".id";
+
+	private static final String NAME = ALIAS + ".name";
+
+	private static final String VALUE = ALIAS + ".value";
+
+	public static final String MOVIE_ID = ALIAS + ".movie_id";
+
+	public static final String COLUMNS = ID + ", " + MOVIE_ID + ", " + NAME
+			+ ", " + VALUE;
+
 	@Override
 	protected String findStatement() {
 		// TODO Auto-generated method stub
@@ -41,8 +56,13 @@ public class AlternateIdsMapper extends AbstractMapper {
 
 	@Override
 	protected DomainObject doLoad(Long id, ResultSet rs) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		AlternateIds alternateIds = new AlternateIds();
+		alternateIds.setId(rs.getInt(ID));
+		alternateIds.setMovieId(rs.getInt(MOVIE_ID));
+		if (rs.getString(NAME).equals(IMDB)) {
+			alternateIds.setImdb(rs.getString(VALUE));
+		}
+		return alternateIds;
 	}
 
 	@Override
@@ -57,7 +77,7 @@ public class AlternateIdsMapper extends AbstractMapper {
 			throws SQLException {
 		AlternateIds ids = (AlternateIds) o;
 		s.setLong(1, ids.getMovieId());
-		s.setString(2, "IMDB");
+		s.setString(2, IMDB);
 		s.setString(3, ids.getImdb());
 	}
 

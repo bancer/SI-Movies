@@ -352,4 +352,31 @@ public abstract class AbstractMapper {
 			throw new ApplicationException(e);
 		}
 	}
+
+	public int countById(long id) {
+		PreparedStatement statement = null;
+		try {
+			statement = getConnection().prepareStatement(countByIdStatement());
+			statement.setLong(1, id);
+			System.out.println(statement);
+			ResultSet rs = statement.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			} else {
+				return 0;
+			}
+		} catch (SQLException e) {
+			throw new ApplicationException(e);
+		} finally {
+			closeStatement(statement);
+		}
+	}
+	
+	/**
+	 * Stub method, should be overwritten in subclasses.
+	 * @return
+	 */
+	protected String countByIdStatement() {
+		return "";
+	}
 }

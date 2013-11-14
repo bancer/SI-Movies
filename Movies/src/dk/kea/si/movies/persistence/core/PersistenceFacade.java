@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import dk.kea.si.movies.domain.Cache;
 import dk.kea.si.movies.domain.DomainObject;
+import dk.kea.si.movies.domain.Movie;
 import dk.kea.si.movies.persistence.mappers.AbstractMapper;
 import dk.kea.si.movies.persistence.mappers.CacheMapper;
 
@@ -92,6 +93,10 @@ public class PersistenceFacade implements Cloneable {
 	public Cache findCache(String request) {
 		CacheMapper mapper = (CacheMapper) mapperFactory.getMapper(Cache.class);
 		return mapper.find(request);
+	}
+
+	public int countById( long id, Class<?> domainClass) {
+		return mapperFactory.getMapper(domainClass).countById(id);
 	}
 
 //	public ArrayList<AuctionItem> findAllAuctionItemsByCategory(long categoryId) {

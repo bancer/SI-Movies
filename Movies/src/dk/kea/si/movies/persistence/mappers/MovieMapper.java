@@ -21,15 +21,63 @@ import dk.kea.si.movies.util.ApplicationException;
 
 public class MovieMapper extends AbstractMapper {
 
-	public static final String COLUMNS = "Movie.id, Movie.title, Movie.year,"
-			+ " Movie.timeline, Movie.runtime, Movie.mpaa_rating,"
-			+ " Movie.users_rating_score, Movie.studio, Movie.critics_consensus,"
-			+ " Movie.synopsis";
+	private static final String ID = "Movie.id";
+
+	private static final String TITLE = "Movie.title";
+
+	private static final String YEAR = "Movie.year";
+
+	private static final String TIMELINE = "Movie.timeline";
+
+	private static final String RUNTIME = "Movie.runtime";
+
+	private static final String MPAA_RATING = "Movie.mpaa_rating";
+
+	private static final String USERS_RATING_SCORE = "Movie.users_rating_score";
+
+	private static final String STUDIO = "Movie.studio";
+
+	private static final String CRITICS_CONSENSUS = "Movie.critics_consensus";
+
+	private static final String SYNOPSIS = "Movie.synopsis";
+	
+	public static final String COLUMNS = ID + ", " + TITLE + ", " + YEAR + ", "
+			+ TIMELINE + ", " + RUNTIME + ", " + MPAA_RATING + ", "
+			+ USERS_RATING_SCORE + ", " + STUDIO + ", " + CRITICS_CONSENSUS
+			+ ", " + SYNOPSIS;
 
 	@Override
 	protected String findStatement() {
-		return "SELECT " + COLUMNS + " FROM Movie AS Movie"
-				+ " WHERE Movie.id=?" + " LIMIT 1;";
+		// Movie, Character, Actor, MovieDirector, Director, Genre, Poster,
+		// CriticRating, AlternateId, Clip, Link
+		return 
+		"SELECT " + COLUMNS + ", " + CharacterMapper.COLUMNS + ", " +
+				CastMapper.COLUMNS + ", " + MovieDirectorMapper.COLUMNS + ", " +
+				DirectorsMapper.COLUMNS + ", " + GenreMapper.COLUMNS + ", " +
+				RatingsMapper.COLUMNS + ", " + AlternateIdsMapper.COLUMNS + ", " +
+				ClipMapper.COLUMNS + ", " + LinksMapper.COLUMNS +
+			" FROM Movie AS Movie" +
+		" LEFT JOIN `Character` AS `" + CharacterMapper.ALIAS + "`" +
+			" ON " + ID + "=" +  CharacterMapper.MOVIE_ID +
+		" LEFT JOIN Actor AS " + CastMapper.ALIAS +
+			" ON " + CharacterMapper.ACTOR_ID + "=" + CastMapper.ID +
+		" LEFT JOIN MovieDirector AS " + MovieDirectorMapper.ALIAS +
+			" ON " + MovieDirectorMapper.MOVIE_ID + "=" + ID +
+		" LEFT JOIN Director AS " + DirectorsMapper.ALIAS +
+			" ON " + DirectorsMapper.ID + "=" + MovieDirectorMapper.DIRECTOR_ID +
+		" LEFT JOIN Genre AS " + GenreMapper.ALIAS +
+			" ON " + GenreMapper.MOVIE_ID + "=" + ID +
+		" LEFT JOIN Poster AS " + PostersMapper.ALIAS +
+			" ON " + PostersMapper.MOVIE_ID + "=" + ID +
+		" LEFT JOIN CriticRating AS " + RatingsMapper.ALIAS +
+			" ON " + RatingsMapper.MOVIE_ID + "=" + ID +
+		" LEFT JOIN AlternateID AS " + AlternateIdsMapper.ALIAS +
+			" ON " + AlternateIdsMapper.MOVIE_ID + "=" + ID +
+		" LEFT JOIN Clip AS " + ClipMapper.ALIAS + 
+			" ON " + ClipMapper.MOVIE_ID + "=" + ID +
+		" LEFT JOIN Link AS " + LinksMapper.ALIAS +
+			" ON " + LinksMapper.MOVIE_ID + "=" + ID + 
+		" WHERE " + ID + "=?" + ";";
 	}
 
 	@Override
@@ -56,20 +104,25 @@ public class MovieMapper extends AbstractMapper {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	protected String countByIdStatement() {
+		return "SELECT COUNT(*) FROM Movie WHERE id=?;";
+	}
 
 	@Override
 	protected DomainObject doLoad(Long id, ResultSet rs) throws SQLException {
 		Movie movie = new Movie();
-		movie.setId(rs.getLong("Movie.id"));
-		movie.setTitle(rs.getString("Movie.title"));
-		movie.setYear(rs.getString("Movie.year"));
-		movie.setTimeline(Timeline.valueOf(rs.getString("Movie.timeline")));
-		movie.setRuntime("" + rs.getInt("Movie.runtime"));
-		movie.setMpaa_rating(rs.getString("Movie.mpaa_rating"));
-		movie.setUsersRatingScore(rs.getFloat("Movie.users_rating_score"));
-		movie.setStudio(rs.getString("Movie.studio"));
-		movie.setCritics_consensus(rs.getString("Movie.critics_consensus"));
-		movie.setSynopsis(rs.getString("Movie.synopsis"));
+		movie.setId(rs.getLong(ID));
+		movie.setTitle(rs.getString(TITLE));
+		movie.setYear(rs.getString(YEAR));
+		movie.setTimeline(Timeline.valueOf(rs.getString(TIMELINE)));
+		movie.setRuntime("" + rs.getInt(RUNTIME));
+		movie.setMpaa_rating(rs.getString(MPAA_RATING));
+		movie.setUsersRatingScore(rs.getFloat(USERS_RATING_SCORE));
+		movie.setStudio(rs.getString(STUDIO));
+		movie.setCritics_consensus(rs.getString(CRITICS_CONSENSUS));
+		movie.setSynopsis(rs.getString(SYNOPSIS));
 		return movie;
 	}
 
@@ -269,6 +322,16 @@ public class MovieMapper extends AbstractMapper {
 
 	class GenreMapper {
 
+		public static final String ALIAS = "Genre";
+		
+		public static final String ID = ALIAS + ".id";
+		
+		public static final String MOVIE_ID = ALIAS + ".movie_id";
+		
+		public static final String NAME = ALIAS + ".name";
+
+		public static final String COLUMNS = ID + ", " + MOVIE_ID + ", " + NAME;
+
 		protected String insertStatement() {
 			return "INSERT INTO `Genre` (movie_id, name) VALUES (?, ?);";
 		}
@@ -297,6 +360,14 @@ public class MovieMapper extends AbstractMapper {
 	}
 
 	class MovieDirectorMapper {
+
+		public static final String ALIAS = "MovieDirector";
+		
+		public static final String DIRECTOR_ID = ALIAS + ".director_id";
+
+		public static final String MOVIE_ID = ALIAS + ".movie_id";
+		
+		public static final String COLUMNS = DIRECTOR_ID + ", " + MOVIE_ID;
 
 		protected String insertStatement() {
 			return "INSERT INTO `MovieDirector` (director_id, movie_id)"
@@ -327,6 +398,19 @@ public class MovieMapper extends AbstractMapper {
 	}
 
 	class CharacterMapper {
+
+		public static final String ALIAS = "Character";
+		
+		public static final String ID = ALIAS + ".id";
+		
+		public static final String MOVIE_ID = ALIAS + ".movie_id";
+		
+		public static final String ACTOR_ID = ALIAS + ".actor_id";
+		
+		public static final String NAME = ALIAS + ".name";
+
+		public static final String COLUMNS = ID + ", " + MOVIE_ID + ", "
+				+ ACTOR_ID + ", " + NAME;
 
 		protected String insertStatement() {
 			return "INSERT INTO `Character` (actor_id, movie_id, name)"

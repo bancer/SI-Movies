@@ -6,8 +6,24 @@ import java.sql.SQLException;
 
 import dk.kea.si.movies.domain.Clip;
 import dk.kea.si.movies.domain.DomainObject;
+import dk.kea.si.movies.domain.Links;
 
 public class ClipMapper extends AbstractMapper {
+	
+	public static final String ALIAS = "Clip";
+
+	public static final String ID = ALIAS + ".id";
+
+	public static final String MOVIE_ID = ALIAS + ".movie_id";
+
+	private static final String DURATION = ALIAS + ".duration";
+
+	private static final String THUMBNAIL = ALIAS + ".thumbnail";
+
+	private static final String LINK = ALIAS + ".link";
+	
+	public static final String COLUMNS = ID + ", " + MOVIE_ID + ", " + DURATION
+			+ ", " + THUMBNAIL + ", " + LINK;
 
 	@Override
 	protected String findStatement() {
@@ -41,8 +57,15 @@ public class ClipMapper extends AbstractMapper {
 
 	@Override
 	protected DomainObject doLoad(Long id, ResultSet rs) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		Clip clip = new Clip();
+		clip.setId(rs.getInt(ID));
+		clip.setMovieId(rs.getInt(MOVIE_ID));
+		clip.setDuration(rs.getInt(DURATION));
+		clip.setThumbnail(rs.getString(THUMBNAIL));
+		Links links = new Links();
+		links.setAlternate(rs.getString(LINK));
+		clip.setLinks(links);
+		return clip;
 	}
 
 	@Override

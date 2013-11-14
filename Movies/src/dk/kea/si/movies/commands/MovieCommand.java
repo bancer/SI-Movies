@@ -35,10 +35,12 @@ public class MovieCommand extends FrontCommand {
 		CompleteCast cast = retrieveCachedCast(id);
 		movie.setFullCast(cast.getCast());
 
-		Movie dbMovie = (Movie) getStorage().find(Long.parseLong(id), Movie.class);
-		if(dbMovie == null) {
+		int count = getStorage().countById(Long.parseLong(id), Movie.class);
+		if(count == 0) {
 			getStorage().insert(movie);
 		} else {
+			Movie dbMovie = (Movie) getStorage().find(Long.parseLong(id), Movie.class);
+			
 			//TODO: implement movie update
 			//getStorage().update(dbMovie);
 		}

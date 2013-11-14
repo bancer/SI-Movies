@@ -5,24 +5,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import dk.kea.si.movies.domain.DomainObject;
-import dk.kea.si.movies.domain.Ratings;
 
-public class RatingsMapper extends AbstractMapper {
+public class UserRatingMapper extends AbstractMapper {
 
-	public static final String ALIAS = "CriticRating";
-	
-	public static final String ID = ALIAS + ".id";
+	public static final String ALIAS = "UserRating";
 	
 	public static final String MOVIE_ID = ALIAS + ".movie_id";
 	
-	public static final String TYPE = ALIAS + ".type";
+	public static final String USER_ID = ALIAS + ".user.id";
 	
-	public static final String SCORE = ALIAS + ".score";
-	
-	public static final String RATING = ALIAS + ".rating";
-
-	public static final String COLUMNS = ID + ", " + MOVIE_ID + ", " + TYPE
-			+ ", " + SCORE + ", " + RATING;
+	public static final String VALUE = ALIAS + ".value";
 
 	@Override
 	protected String findStatement() {
@@ -44,8 +36,8 @@ public class RatingsMapper extends AbstractMapper {
 
 	@Override
 	protected String insertStatement() {
-		return "INSERT INTO `CriticRating` (movie_id, type, score, rating)"
-				+ " VALUES (?, ?, ?, ?), (?, ?, ?, ?);";
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -70,15 +62,8 @@ public class RatingsMapper extends AbstractMapper {
 	@Override
 	protected void doInsert(DomainObject o, PreparedStatement s)
 			throws SQLException {
-		Ratings ratings = (Ratings) o;
-		s.setLong(1, ratings.getMovieId());
-		s.setString(2, "CRITICS");
-		s.setInt(3, ratings.getCritics_score());
-		s.setString(4, ratings.getCritics_rating());
-		s.setLong(5, ratings.getMovieId());
-		s.setString(6, "AUDIENCE");
-		s.setInt(7, ratings.getAudience_score());
-		s.setString(8, ratings.getAudience_rating());
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override

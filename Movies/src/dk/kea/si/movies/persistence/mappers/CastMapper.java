@@ -10,7 +10,13 @@ import dk.kea.si.movies.util.ApplicationException;
 
 public class CastMapper extends AbstractMapper {
 
-	public static final String COLUMNS = "Cast.id, Cast.name";
+	public static final String ALIAS = "Cast";
+
+	public static final String ID = ALIAS + ".id";
+
+	private static final String NAME = ALIAS + ".name";
+
+	public static final String COLUMNS = ID + ", " + NAME;
 
 	@Override
 	protected String findStatement() {
@@ -25,8 +31,8 @@ public class CastMapper extends AbstractMapper {
 	}
 
 	protected String findByNameStatement() {
-		return "SELECT " + COLUMNS + " FROM Actor AS Cast"
-				+ " WHERE Cast.name=?" + " LIMIT 1;";
+		return "SELECT " + COLUMNS + " FROM Actor AS " + ALIAS + " WHERE "
+				+ NAME + "=?" + " LIMIT 1;";
 	}
 
 	@Override
@@ -49,8 +55,8 @@ public class CastMapper extends AbstractMapper {
 	@Override
 	protected DomainObject doLoad(Long id, ResultSet rs) throws SQLException {
 		Cast cast = new Cast();
-		cast.setId(rs.getLong("Cast.id"));
-		cast.setName(rs.getString("Cast.name"));
+		cast.setId(rs.getLong(ID));
+		cast.setName(rs.getString(NAME));
 		return cast;
 	}
 
