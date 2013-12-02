@@ -484,7 +484,7 @@ h1#logo a {
 	width: 80px;
 }
 
-.loginbox a:link, .loginbox a:visited {
+.loginbox a:link, .loginbox a:visited, #login_form input[type=submit] {
 	background-color: rgb(242, 162, 35);
     background: -webkit-gradient(linear, left top, left bottom, from(rgb(242, 162, 35)), to(rgb(218, 130, 18)));
     background: -webkit-linear-gradient(top, rgb(242, 162, 35), rgb(218, 130, 18));
@@ -511,16 +511,100 @@ h1#logo a {
     text-shadow: 0 -1px 0 rgb(195, 88, 19);
 }
 
-.loginbox a:hover {
+.loginbox a:hover, #login_form input[type=submit]:hover {
     opacity:.85;
     cursor: pointer;
 }
 
-.loginbox a:active {
+.loginbox a:active, #login_form input[type=submit]:active {
     border: 1px solid rgb(170, 130, 18);
     box-shadow: 0 0 10px 5px rgb(191, 192, 0) inset;
     -webkit-box-shadow:0 0 10px 5px rgb(191, 192, 0) inset;
     -moz-box-shadow: 0 0 10px 5px rgb(191, 192, 0) inset;
     -ms-box-shadow: 0 0 10px 5px rgb(191, 192, 0) inset;
     -o-box-shadow: 0 0 10px 5px rgb(191, 192, 0) inset;
+}
+
+/* Login Form */
+#login_form {
+	margin: 0 auto;
+	width: 250px;
+}
+
+#login_form h1 {
+	text-align: center;
+}
+
+.form_hint, .validation_error {
+	font-size: 0.75em;
+}
+.validation_error {
+	color: #b03535;
+}
+
+#login_form ul {
+	list-style-type: none;
+	list-style-position: outside;
+	margin: 0px;
+	padding: 0px;
+}
+
+#login_form li {
+	padding: 12px;
+	position: relative;
+}
+
+#login_form li:first-child,#login_form li:last-child {
+	border-bottom: 1px solid #777;
+}
+
+#login_form label {
+	display: inline-block;
+	float: left;
+	margin-top: 3px;
+	padding: 3px;
+	width: 100%;
+}
+
+#login_form input {
+	background: #000;
+	border:1px solid #413e3e;
+    border-radius:2px;
+    color: #787878;
+	height: 20px;
+	padding: 5px 8px;
+	width: 90%;	
+}
+#login_form input:focus {
+    background: #000;
+    border:1px solid #969393;
+    color: #787878;
+}
+#login_form input[type=submit] {
+	height: 40px;
+	padding: 0px 0px;
+	width: 100%;
+}
+
+.form_hint {
+	background: grey;
+	border-radius: 3px 3px 3px 3px;
+	color: white;
+	margin-left: 8px;
+	padding: 1px 6px;
+	z-index: 999; /* hints stay above all other elements */
+	position: absolute; /* allows proper formatting if hint is two lines */
+	display: none;
+}
+
+.form_hint::before {
+	content: "\25C0"; /* left point triangle in escaped unicode */
+	color: grey;
+	position: absolute;
+	top: 1px;
+	left: -6px;
+}
+
+#login_form input:focus+.form_hint {
+	display: inline;
 }
