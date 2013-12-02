@@ -33,7 +33,7 @@
 		</ul>
 		<% } else { %>
 		<ul class="nav pull-right s">
-			<li><a id="simple_login" class="simple_login" href="#">Log-In</a></li>
+			<li><a id="simple_login" class="simple_login" href="?command=Login">Log-In</a></li>
 			<li><a id="login" class="janrainEngage" href="#">Social Sign-In</a></li>
 		</ul>
 		<% } %>
@@ -62,12 +62,13 @@
 		</ul>
 		<div id="search">
 			<form action="" method="get" accept-charset="utf-8">
-				<input type="hidden" name="command" value="SearchMovies" /> <input
-					type="hidden" name="page" value="1" /> <label for="search_field">SEARCH</label>
+				<input type="hidden" name="command" value="SearchMovies" /> 
+				<input type="hidden" name="page" value="1" />
+				<label for="search_field">SEARCH</label>
 				<input type="text" name="search_field" value="Enter search here"
 					id="search_field" title="Enter search here"
-					class="blink search-field" /> <input type="submit" value="GO!"
-					class="search-button" />
+					class="blink search-field" /> 
+				<input type="submit" value="GO!" class="search-button" />
 			</form>
 		</div>
 	</div>
