@@ -33,7 +33,8 @@
 		</ul>
 		<% } else { %>
 		<ul class="nav pull-right s">
-			<li><a id="login" class="janrainEngage" href="#">Sign-In</a></li>
+			<li><a id="simple_login" class="simple_login" href="#">Log-In</a></li>
+			<li><a id="login" class="janrainEngage" href="#">Social Sign-In</a></li>
 		</ul>
 		<% } %>
 	</div>
