@@ -326,17 +326,17 @@ public abstract class AbstractMapper {
 	}
 	
 	protected void startTransaction() throws SQLException {
-		System.out.println("START TRANSACTION");
+		System.out.println("START TRANSACTION " + System.currentTimeMillis());
 		getConnection().setAutoCommit(false);
 	}
 	
 	protected void commitTransaction() throws SQLException {
-		System.out.println("COMMIT TRANSACTION");
+		System.out.println("COMMIT TRANSACTION " + System.currentTimeMillis());
 		getConnection().commit();
 	}
 	
 	protected void rollbackTransaction() {
-		System.out.println("ROLLBACK TRANSACTION");
+		System.out.println("ROLLBACK TRANSACTION " + System.currentTimeMillis());
 		try {
 			getConnection().rollback();
 		} catch (SQLException e) {
@@ -345,7 +345,7 @@ public abstract class AbstractMapper {
 	}
 	
 	protected void endTransaction() {
-		System.out.println("END TRANSACTION");
+		System.out.println("END TRANSACTION " + System.currentTimeMillis());
 		try {
 			getConnection().setAutoCommit(false);
 		} catch (SQLException e) {

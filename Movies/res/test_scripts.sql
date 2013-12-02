@@ -93,4 +93,38 @@ SELECT Movie.id, Movie.title, Movie.year, Movie.timeline, Movie.runtime, Movie.m
  LEFT JOIN `Character` AS `Character` ON Movie.id=Character.movie_id LEFT JOIN Actor AS Cast ON Character.actor_id=Cast.id LEFT JOIN MovieDirector AS MovieDirector ON MovieDirector.movie_id=Movie.id LEFT JOIN Director AS Director ON Director.id=MovieDirector.director_id LEFT JOIN Genre AS Genre ON Genre.movie_id=Movie.id LEFT JOIN Poster AS Poster ON Poster.movie_id=Movie.id LEFT JOIN CriticRating AS CriticRating ON CriticRating.movie_id=Movie.id LEFT JOIN AlternateID AS AlternateId ON AlternateId.movie_id=Movie.id LEFT JOIN Clip AS Clip ON Clip.movie_id=Movie.id LEFT JOIN Link AS Link ON Link.movie_id=Movie.id WHERE Movie.id=771308378 LIMIT 1;
 
 INSERT INTO `movies`.`UserRating` (`user_id`, `movie_id`, `value`) 
-VALUES ('1', '9401', '3');
+VALUES ('3', '9408', '2');
+
+SELECT * FROM Movie WHERE id=9408;
+
+EXPLAIN EXTENDED
+SELECT Movie.id, Movie.title, Movie.year, Movie.timeline, Movie.runtime, Movie.mpaa_rating, Movie.users_rating_score, Movie.studio, Movie.critics_consensus, Movie.synopsis, Character.id, Character.movie_id, Character.actor_id, Character.name, Cast.id, Cast.name, MovieDirector.director_id, MovieDirector.movie_id, Director.id, Director.name, Genre.id, Genre.movie_id, Genre.name, CriticRating.id, CriticRating.movie_id, CriticRating.type, CriticRating.score, CriticRating.rating, AlternateId.id, AlternateId.movie_id, AlternateId.name, AlternateId.value, Clip.id, Clip.movie_id, Clip.duration, Clip.thumbnail, Clip.link, Link.id, Link.movie_id, Link.type, Link.url FROM Movie AS Movie 
+LEFT JOIN `Character` AS `Character` ON Movie.id=Character.movie_id 
+LEFT JOIN Actor AS Cast ON Character.actor_id=Cast.id 
+LEFT JOIN MovieDirector AS MovieDirector ON MovieDirector.movie_id=Movie.id 
+LEFT JOIN Director AS Director ON Director.id=MovieDirector.director_id 
+LEFT JOIN Genre AS Genre ON Genre.movie_id=Movie.id 
+LEFT JOIN Poster AS Poster ON Poster.movie_id=Movie.id 
+LEFT JOIN CriticRating AS CriticRating ON CriticRating.movie_id=Movie.id 
+LEFT JOIN AlternateID AS AlternateId ON AlternateId.movie_id=Movie.id 
+LEFT JOIN Clip AS Clip ON Clip.movie_id=Movie.id
+LEFT JOIN Link AS Link ON Link.movie_id=Movie.id 
+WHERE Movie.title LIKE "%ala%";
+
+EXPLAIN
+SELECT 
+    Director.id, Director.name
+FROM
+    Director AS Director
+WHERE
+    Director.name = 'Francis Lawrence'
+LIMIT 1;
+
+EXPLAIN
+SELECT 
+    Cast.id, Cast.name
+FROM
+    Actor AS Cast
+WHERE
+    Cast.name = 'Jennifer Lawrence'
+LIMIT 1;
