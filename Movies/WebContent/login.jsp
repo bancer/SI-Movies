@@ -22,6 +22,11 @@
 						<li>
 							<h1>Login</h1>
 						</li>
+						<% if(request.getAttribute("error-message") != null) { %>
+							<li class='validation_error'>
+								<%=request.getAttribute("error-message")%>
+							</li>
+						<% } %>
 						<li>
 							<label for="username">Username:</label>
 							<input type="text" name="username" id="username" />
@@ -35,7 +40,9 @@
 				</form>
 
 			</div>
+		</div>
 
-			<%@ include file="inc/footer.jsp"%>
-		</div></body>
+		<%@ include file="inc/footer.jsp"%>
+	</div>
+</body>
 </html>

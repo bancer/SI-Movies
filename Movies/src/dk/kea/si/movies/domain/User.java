@@ -1,10 +1,17 @@
 package dk.kea.si.movies.domain;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+
+import dk.kea.si.movies.util.ApplicationException;
 
 public class User extends DomainObject {
 
-	private String username;
+	private static final int MAX_OPEN_IDS = 6;
+
+	private String displayName;
 
 	private String password;
 
@@ -17,20 +24,24 @@ public class User extends DomainObject {
 	private String firstName;
 
 	private String lastName;
+	
+	private String userName;
+	
+	private String salt;
 
 	private ArrayList<OpenID> openIds;
 
 	public User() {
 
-		openIds = new ArrayList<OpenID>(6);
+		openIds = new ArrayList<OpenID>(MAX_OPEN_IDS);
 	}
 
-	public String getUsername() {
-		return username;
+	public String getDisplayName() {
+		return displayName;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setDisplayName(String username) {
+		this.displayName = username;
 		if (username != null && username.length() < 1) {
 			throw new IllegalArgumentException("Username must not be empty.");
 		}
@@ -45,13 +56,40 @@ public class User extends DomainObject {
 	}
 
 	public void setPassword(String password) {
-		this.password = password;
+		this.password = sha256(password);
 		if (password != null && password.length() < 1) {
-			throw new IllegalArgumentException("PW must not be empty.");
+			throw new IllegalArgumentException("Password must not be empty.");
 		}
-		if (password != null && password.length() > 255) {
+		if (password != null && password.length() < 8) {
 			throw new IllegalArgumentException(
-					"PW must not be longer than 255 characters.");
+					"Password must not be shorter than 8 characters.");
+		}
+	}
+
+	/**
+	 * Hashes the string using sha 256 algorithm.
+	 * Source: www.stackoverflow.com
+	 * 
+	 * @param str	string to be hashed.
+	 * @return		hex string representation of the hash.
+	 */
+	private String sha256(String str) {
+		try {
+			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			byte[] hash = digest.digest(str.getBytes("UTF-8"));
+			StringBuffer hexString = new StringBuffer();
+			for (int i = 0; i < hash.length; i++) {
+				String hex = Integer.toHexString(0xff & hash[i]);
+				if(hex.length() == 1) {
+					hexString.append('0');
+				}
+				hexString.append(hex);
+			}
+			return hexString.toString();
+		} catch (NoSuchAlgorithmException e) {
+			throw new ApplicationException(e);
+		} catch (UnsupportedEncodingException e) {
+			throw new ApplicationException(e);
 		}
 	}
 
@@ -128,7 +166,7 @@ public class User extends DomainObject {
 	public String toString() {
 		String result = "[" + address + ", " + email + ", " + firstName + ", "
 				+ lastName + ", " + password + ", "
-				+ phone + ", " + username + ", [";
+				+ phone + ", " + displayName + ", [";
 		for (int i = 0; i < openIds.size(); i++) {
 			result += openIds.get(i).toString();
 		}
@@ -154,5 +192,32 @@ public class User extends DomainObject {
 		} else {
 			return null;
 		}
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+		if (userName != null && userName.length() < 1) {
+			throw new IllegalArgumentException("Username must not be empty.");
+		}
+		if (userName != null && userName.length() > 20) {
+			throw new IllegalArgumentException(
+					"Username must not be longer than 20 characters.");
+		}
+		if (userName != null && userName.length() < 4) {
+			throw new IllegalArgumentException(
+					"Username must not be shorter than 4 characters.");
+		}
+	}
+
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
 	}
 }

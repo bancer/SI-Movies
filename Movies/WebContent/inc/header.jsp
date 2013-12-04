@@ -19,7 +19,7 @@
 		<% User user = (User) session.getAttribute("authenticated.user"); %>
 		<ul class="nav pull-right remove">
 			<li class="dropdown pull-right"><a data-toggle="dropdown" id="username"
-				class="dropdown-toggle" href="#"> <%= user.getUsername() %> <b
+				class="dropdown-toggle" href="#"> <%=user.getDisplayName()%> <b
 					class="caret"></b>
 			</a>
 			 <!-- Dropdown menu -->

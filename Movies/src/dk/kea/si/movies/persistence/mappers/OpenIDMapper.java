@@ -30,7 +30,7 @@ public class OpenIDMapper extends AbstractMapper {
 
 	@Override
 	protected String insertStatement() {
-		return "INSERT INTO open_ids (user_id, identifier, provider)" +
+		return "INSERT INTO OpenID (user_id, identifier, provider)" +
 			" VALUES (?, ?, ?)";
 	}
 

@@ -541,11 +541,8 @@ h1#logo a {
 	text-align: center;
 }
 
-.form_hint, .validation_error {
-	font-size: 0.75em;
-}
 .validation_error {
-	color: #b03535;
+	color: rgb(242, 162, 35);
 }
 
 #login_form ul {

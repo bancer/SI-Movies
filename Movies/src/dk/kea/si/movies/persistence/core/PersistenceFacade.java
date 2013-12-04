@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import dk.kea.si.movies.domain.Cache;
 import dk.kea.si.movies.domain.DomainObject;
 import dk.kea.si.movies.domain.Movie;
+import dk.kea.si.movies.domain.User;
 import dk.kea.si.movies.persistence.mappers.AbstractMapper;
 import dk.kea.si.movies.persistence.mappers.CacheMapper;
+import dk.kea.si.movies.persistence.mappers.UserMapper;
 
 //import com.marv.business.entities.AuctionItem;
 //import com.marv.business.entities.DomainObject;
@@ -109,4 +111,9 @@ public class PersistenceFacade implements Cloneable {
 //		UserMapper mapper = (UserMapper) mapperFactory.getMapper(User.class);
 //		return mapper.findByOpenId(identifier);
 //	}
+	
+	public DomainObject findByUserNameAndPassword(User user) {
+		UserMapper mapper = (UserMapper) mapperFactory.getMapper(User.class);
+		return mapper.findByUsernameAndPassword(user);
+	}
 }
