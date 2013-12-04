@@ -29,8 +29,17 @@ a img {
 }
 
 input,textarea,select {
+	background: #000;
+	border: 1px solid #413e3e;
+	color: #787878;
 	font-size: 12px;
 	font-family: Arial, Helvetica, sans-serif;
+}
+
+input:focus, textarea:focus, select:focus {
+    background: #000;
+    border:1px solid #969393;
+    color: #787878;
 }
 
 textarea {
@@ -233,9 +242,6 @@ h1#logo a {
 
 #search .search-field {
 	width: 238px;
-	border: 1px solid #413e3e;
-	background: #000;
-	color: #787878;
 	padding: 2px 0 2px 2px;
 }
 
@@ -567,19 +573,12 @@ h1#logo a {
 }
 
 #login_form input {
-	background: #000;
-	border:1px solid #413e3e;
     border-radius:2px;
-    color: #787878;
 	height: 20px;
 	padding: 5px 8px;
 	width: 90%;	
 }
-#login_form input:focus {
-    background: #000;
-    border:1px solid #969393;
-    color: #787878;
-}
+
 #login_form input[type=submit] {
 	height: 40px;
 	padding: 0px 0px;
