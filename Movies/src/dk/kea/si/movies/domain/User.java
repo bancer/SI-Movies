@@ -3,9 +3,13 @@ package dk.kea.si.movies.domain;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.xml.bind.DatatypeConverter;
 
 import dk.kea.si.movies.util.ApplicationException;
 
@@ -57,12 +61,12 @@ public class User extends DomainObject {
 		return password;
 	}
 
-	public void setPassword(String password) {
-		this.password = sha256(password);
-		if (password != null && password.length() < 1) {
+	public void setPassword(String pass) {
+		this.password = User.sha256(pass);
+		if (pass != null && pass.length() < 1) {
 			throw new IllegalArgumentException("Password must not be empty.");
 		}
-		if (password != null && password.length() < 8) {
+		if (pass != null && pass.length() < 8) {
 			throw new IllegalArgumentException(
 					"Password must not be shorter than 8 characters.");
 		}
@@ -75,7 +79,7 @@ public class User extends DomainObject {
 	 * @param str	string to be hashed.
 	 * @return		hex string representation of the hash.
 	 */
-	private String sha256(String str) {
+	public static String sha256(String str) {
 		try {
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
 			byte[] hash = digest.digest(str.getBytes("UTF-8"));
@@ -101,13 +105,16 @@ public class User extends DomainObject {
 
 	public void setEmail(String email) {
 		this.email = email;
-		if (email != null && email.length() < 1) {
-			throw new IllegalArgumentException("Email must not be empty.");
-		}
-		Pattern p = Pattern.compile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
-		Matcher m = p.matcher(email);
-		if(!m.matches()) {
-			throw new IllegalArgumentException("Invalid email address.");
+		if (email != null) {
+			if (email.length() < 1) {
+				throw new IllegalArgumentException("Email must not be empty.");
+			} else {
+				Pattern p = Pattern.compile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
+				Matcher m = p.matcher(email);
+				if(!m.matches()) {
+					throw new IllegalArgumentException("Invalid email address.");
+				}
+			}
 		}
 	}
 
@@ -225,5 +232,12 @@ public class User extends DomainObject {
 
 	public void setSalt(String salt) {
 		this.salt = salt;
+	}
+
+	public static String generateSalt() {	
+		Random random = new SecureRandom();
+		byte bytes[] = new byte[32];
+		random.nextBytes(bytes);
+		return DatatypeConverter.printHexBinary(bytes);
 	}
 }

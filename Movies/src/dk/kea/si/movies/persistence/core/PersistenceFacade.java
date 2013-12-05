@@ -112,8 +112,8 @@ public class PersistenceFacade implements Cloneable {
 //		return mapper.findByOpenId(identifier);
 //	}
 	
-	public DomainObject findByUserNameAndPassword(User user) {
+	public DomainObject findByUserName(User user) {
 		UserMapper mapper = (UserMapper) mapperFactory.getMapper(User.class);
-		return mapper.findByUsernameAndPassword(user);
+		return mapper.findByUsername(user);
 	}
 }

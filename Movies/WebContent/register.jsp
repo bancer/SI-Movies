@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<jsp:useBean 
+	id="helper" 
+	class="dk.kea.si.movies.helpers.UserHelper" 
+	scope="request" />
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -30,39 +34,31 @@
 						<% } %>
 						<li>
 							<label for="username">Username:</label>
-							<input type="text" name="username" id="username" />
-							<% if(request.getAttribute("error.username") != null) { %>
-								<span class='validation_error'>
-									<%=request.getAttribute("error.username")%>
-								</span>
-							<% } %>
+							<input type="text" name="username" id="username" value="<%=helper.getUsername()%>" />
+							<span class='validation_error'>
+								<%=helper.getError("username")%>
+							</span>
 						</li>
 						<li>
 							<label for="email">Email:</label>
-							<input type="text" name="email" id="email" />
-							<% if(request.getAttribute("error.email") != null) { %>
-								<span class='validation_error'>
-									<%=request.getAttribute("error.email")%>
-								</span>
-							<% } %>
+							<input type="text" name="email" id="email" value="<%=helper.getEmail()%>" />
+							<span class='validation_error'>
+								<%=helper.getError("email")%>
+							</span>
 						</li>
 						<li>
 							<label for="password">Password:</label>
 							<input type="password" name="password" id="password" />
-							<% if(request.getAttribute("error.password") != null) { %>
-								<span class='validation_error'>
-									<%=request.getAttribute("error.password")%>
-								</span>
-							<% } %>
+							<span class='validation_error'>
+								<%=helper.getError("password")%>
+							</span>
 						</li>
 						<li>
-							<label for="repeat_password">Repeat Password:</label>
-							<input type="password" name="repeat_password" id="repeat_password" />
-							<% if(request.getAttribute("error.repeat_password") != null) { %>
-								<span class='validation_error'>
-									<%=request.getAttribute("error.repeat_password")%>
-								</span>
-							<% } %>
+							<label for="repeatpassword">Repeat Password:</label>
+							<input type="password" name="repeatpassword" id="repeatpassword" />
+							<span class='validation_error'>
+								<%=helper.getError("repeatpassword")%>
+							</span>
 						</li>
 						<li><input type="submit" value="Submit" /></li>
 					</ul>

@@ -1,5 +1,6 @@
 package dk.kea.si.movies.domain;
 
+
 public abstract class DomainObject {
 
 	protected static final long PLACEHOLDER_ID = -1;

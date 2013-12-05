@@ -31,11 +31,11 @@ public class UserMapper extends AbstractMapper {
 				" LIMIT 1;";
 	}
 
-	private String findByUsernameAndPasswordStatement() {
+	private String findByUsernameStatement() {
 		return "SELECT " + COLUMNS + " FROM User AS User" +
 				" LEFT JOIN OpenID AS OpenID" +
 					" ON User.id=OpenID.user_id" +
-				" WHERE User.username=? AND User.password=?" +
+				" WHERE User.username=?" +
 				" LIMIT 1;";
 	}
 
@@ -152,12 +152,11 @@ public class UserMapper extends AbstractMapper {
 		}
 	}
 
-	public DomainObject findByUsernameAndPassword(User user) {
+	public DomainObject findByUsername(User user) {
 		PreparedStatement statement = null;
 		try {
-			statement = getConnection().prepareStatement(findByUsernameAndPasswordStatement());
+			statement = getConnection().prepareStatement(findByUsernameStatement());
 			statement.setString(1, user.getUserName());
-			statement.setString(2, user.getPassword());
 			System.out.println(statement);
 			ResultSet rs = statement.executeQuery();
 			if(rs.next()) {

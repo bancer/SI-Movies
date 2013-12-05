@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<jsp:useBean id="helper" 
+	class="dk.kea.si.movies.helpers.UserHelper" 
+	scope="request" />
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -29,11 +32,17 @@
 						<% } %>
 						<li>
 							<label for="username">Username:</label>
-							<input type="text" name="username" id="username" />
+							<input type="text" name="username" id="username" value="<%=helper.getUsername()%>" />
+							<span class='validation_error'>
+								<%=helper.getError("username")%>
+							</span>
 						</li>
 						<li>
 							<label for="password">Password:</label>
 							<input type="password" name="password" id="password" />
+							<span class='validation_error'>
+								<%=helper.getError("password")%>
+							</span>
 						</li>
 						<li><input type="submit" value="Submit" /></li>
 					</ul>
