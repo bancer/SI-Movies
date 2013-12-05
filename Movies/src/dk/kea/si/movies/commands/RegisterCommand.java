@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 
 import dk.kea.si.movies.domain.User;
 import dk.kea.si.movies.helpers.UserHelper;
+import dk.kea.si.movies.util.AppUtils;
 
 public class RegisterCommand extends FrontCommand {
 
@@ -41,7 +42,7 @@ public class RegisterCommand extends FrontCommand {
 	}
 
 	private UserHelper initHelper(User user) {
-		String salt = User.generateSalt();
+		String salt = AppUtils.generateSalt();
 		user.setSalt(salt);
 		String prefix = request.getSession().getServletContext()
 				.getInitParameter("salt");
@@ -50,7 +51,7 @@ public class RegisterCommand extends FrontCommand {
 		helper.setUsername(request.getParameter("username"));
 		helper.setEmail(request.getParameter("email"));
 		helper.setPassword(request.getParameter("password"));
-		helper.setRepeatpassword(request.getParameter("repeatpassword"));
+		helper.comparePassword(request.getParameter("repeatpassword"));
 		helper.setPassword(prefix + request.getParameter("password") + salt);
 		return helper;
 	}

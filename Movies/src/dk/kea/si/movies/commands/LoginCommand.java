@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 
 import dk.kea.si.movies.domain.User;
 import dk.kea.si.movies.helpers.UserHelper;
+import dk.kea.si.movies.util.AppUtils;
 
 public class LoginCommand extends FrontCommand {
 
@@ -25,7 +26,7 @@ public class LoginCommand extends FrontCommand {
 				String prefix = request.getSession().getServletContext()
 						.getInitParameter("salt");
 				String pass = prefix + request.getParameter("password") + user.getSalt();
-				String hexPass = User.sha256(pass);
+				String hexPass = AppUtils.sha256(pass);
 				if(user.getPassword().equals(hexPass)) {
 					startSession(user);
 					// redirect to home page

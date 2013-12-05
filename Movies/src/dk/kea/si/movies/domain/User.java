@@ -1,17 +1,10 @@
 package dk.kea.si.movies.domain;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.bind.DatatypeConverter;
-
-import dk.kea.si.movies.util.ApplicationException;
+import dk.kea.si.movies.util.AppUtils;
 
 public class User extends DomainObject {
 
@@ -62,40 +55,13 @@ public class User extends DomainObject {
 	}
 
 	public void setPassword(String pass) {
-		this.password = User.sha256(pass);
+		this.password = AppUtils.sha256(pass);
 		if (pass != null && pass.length() < 1) {
 			throw new IllegalArgumentException("Password must not be empty.");
 		}
 		if (pass != null && pass.length() < 8) {
 			throw new IllegalArgumentException(
 					"Password must not be shorter than 8 characters.");
-		}
-	}
-
-	/**
-	 * Hashes the string using sha 256 algorithm.
-	 * Source: www.stackoverflow.com
-	 * 
-	 * @param str	string to be hashed.
-	 * @return		hex string representation of the hash.
-	 */
-	public static String sha256(String str) {
-		try {
-			MessageDigest digest = MessageDigest.getInstance("SHA-256");
-			byte[] hash = digest.digest(str.getBytes("UTF-8"));
-			StringBuffer hexString = new StringBuffer();
-			for (int i = 0; i < hash.length; i++) {
-				String hex = Integer.toHexString(0xff & hash[i]);
-				if(hex.length() == 1) {
-					hexString.append('0');
-				}
-				hexString.append(hex);
-			}
-			return hexString.toString();
-		} catch (NoSuchAlgorithmException e) {
-			throw new ApplicationException(e);
-		} catch (UnsupportedEncodingException e) {
-			throw new ApplicationException(e);
 		}
 	}
 
@@ -232,12 +198,5 @@ public class User extends DomainObject {
 
 	public void setSalt(String salt) {
 		this.salt = salt;
-	}
-
-	public static String generateSalt() {	
-		Random random = new SecureRandom();
-		byte bytes[] = new byte[32];
-		random.nextBytes(bytes);
-		return DatatypeConverter.printHexBinary(bytes);
 	}
 }

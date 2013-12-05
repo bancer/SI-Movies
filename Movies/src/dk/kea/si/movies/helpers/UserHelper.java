@@ -1,6 +1,7 @@
 package dk.kea.si.movies.helpers;
 
 import dk.kea.si.movies.domain.User;
+import dk.kea.si.movies.util.AppUtils;
 
 public class UserHelper extends AHelper {
 
@@ -67,13 +68,9 @@ public class UserHelper extends AHelper {
 		}
 	}
 	
-	public void setRepeatpassword(String pass) {
-		if(!user.getPassword().equals(User.sha256(pass))) {
+	public void comparePassword(String pass) {
+		if(!user.getPassword().equals(AppUtils.sha256(pass))) {
 			getErrors().put("repeatpassword", "Passwords do not match.");
 		}
-	}
-	
-	public String getRepeatpassword() {
-		return "";
 	}
 }
