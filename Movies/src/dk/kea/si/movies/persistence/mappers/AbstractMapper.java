@@ -354,10 +354,45 @@ public abstract class AbstractMapper {
 	}
 
 	public int countById(long id) {
+		String stmt = countByIdStatement();
+		return doCount(stmt, new Long(id));
+//		PreparedStatement statement = null;
+//		try {
+//			statement = getConnection().prepareStatement(stmt);
+//			statement.setLong(1, id);
+//			System.out.println(statement);
+//			ResultSet rs = statement.executeQuery();
+//			if (rs.next()) {
+//				return rs.getInt(1);
+//			} else {
+//				return 0;
+//			}
+//		} catch (SQLException e) {
+//			throw new ApplicationException(e);
+//		} finally {
+//			closeStatement(statement);
+//		}
+	}
+
+	public int countByUserName(String userName) {
+		String stmt = countByUserNameStatement();
+		return doCount(stmt, userName);
+	}
+
+	public int countByEmail(String email) {
+		String stmt = countByEmailStatement();
+		return doCount(stmt, email);
+	}
+
+	private int doCount(String stmt, Object field) {
 		PreparedStatement statement = null;
 		try {
-			statement = getConnection().prepareStatement(countByIdStatement());
-			statement.setLong(1, id);
+			statement = getConnection().prepareStatement(stmt);
+			if(field instanceof String) {
+				statement.setString(1, (String) field);
+			} else if(field instanceof Long) {
+				statement.setLong(1, (Long) field);
+			}
 			System.out.println(statement);
 			ResultSet rs = statement.executeQuery();
 			if (rs.next()) {
@@ -377,6 +412,22 @@ public abstract class AbstractMapper {
 	 * @return
 	 */
 	protected String countByIdStatement() {
+		return "";
+	}
+	
+	/**
+	 * Stub method, should be overwritten in subclasses.
+	 * @return
+	 */
+	protected String countByUserNameStatement() {
+		return "";
+	}
+	
+	/**
+	 * Stub method, should be overwritten in subclasses.
+	 * @return
+	 */
+	protected String countByEmailStatement() {
 		return "";
 	}
 }

@@ -62,6 +62,16 @@ public class UserMapper extends AbstractMapper {
 	protected String deleteStatement() {
 		return "DELETE FROM User WHERE id=?";
 	}
+	
+	@Override
+	protected String countByUserNameStatement() {
+		return "SELECT COUNT(*) FROM User WHERE username=?;";
+	}
+	
+	@Override
+	protected String countByEmailStatement() {
+		return "SELECT COUNT(*) FROM User WHERE email=?;";
+	}
 
 	public User find(Long id) {
 		return (User) abstractFind(id);

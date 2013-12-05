@@ -101,6 +101,14 @@ public class PersistenceFacade implements Cloneable {
 		return mapperFactory.getMapper(domainClass).countById(id);
 	}
 
+	public int countByUserName(String userName, Class<?> domainClass) {
+		return mapperFactory.getMapper(domainClass).countByUserName(userName);
+	}
+
+	public int countByEmail(String email, Class<?> domainClass) {
+		return mapperFactory.getMapper(domainClass).countByEmail(email);
+	}
+
 //	public ArrayList<AuctionItem> findAllAuctionItemsByCategory(long categoryId) {
 //		AuctionItemMapper mapper = 
 //				(AuctionItemMapper)mapperFactory.getMapper(AuctionItem.class);
