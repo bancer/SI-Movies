@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import dk.kea.si.movies.util.ApplicationException;
 
@@ -99,9 +101,13 @@ public class User extends DomainObject {
 
 	public void setEmail(String email) {
 		this.email = email;
-		if (email != null && email.length() > 50) {
-			throw new IllegalArgumentException(
-					"Email must not be longer than 50 characters.");
+		if (email != null && email.length() < 1) {
+			throw new IllegalArgumentException("Email must not be empty.");
+		}
+		Pattern p = Pattern.compile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
+		Matcher m = p.matcher(email);
+		if(!m.matches()) {
+			throw new IllegalArgumentException("Invalid email address.");
 		}
 	}
 
@@ -164,7 +170,7 @@ public class User extends DomainObject {
 
 	@Override
 	public String toString() {
-		String result = "[" + address + ", " + email + ", " + firstName + ", "
+		String result = "[" + getId() + ", " + address + ", " + email + ", " + firstName + ", "
 				+ lastName + ", " + password + ", "
 				+ phone + ", " + displayName + ", [";
 		for (int i = 0; i < openIds.size(); i++) {

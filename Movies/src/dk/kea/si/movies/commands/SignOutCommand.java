@@ -9,8 +9,7 @@ public class SignOutCommand extends FrontCommand{
 
 	@Override
 	public void process() throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		session.invalidate();
+		endSession();
 		response.sendRedirect(request.getHeader("referer"));
 	}
 

@@ -7,7 +7,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import dk.kea.si.movies.domain.User;
 import dk.kea.si.movies.persistence.core.PersistenceFacade;
 
 
@@ -49,5 +51,15 @@ public abstract class FrontCommand {
 	
 	protected PersistenceFacade getStorage() {
 		return PersistenceFacade.getInstance();
+	}
+
+	protected void startSession(User user) {
+		HttpSession session = request.getSession(true);
+		session.setAttribute("authenticated.user", user);
+	}
+
+	protected void endSession() {
+		HttpSession session = request.getSession();
+		session.invalidate();
 	}
 }

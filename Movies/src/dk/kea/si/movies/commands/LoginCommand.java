@@ -21,6 +21,7 @@ public class LoginCommand extends FrontCommand {
 			User temp = new User();
 			temp.setUserName(request.getParameter("username"));
 			temp.setPassword(request.getParameter("password"));
+			//TODO: redo authentication (include salt)
 			user = (User) getStorage().findByUserNameAndPassword(temp);
 		} catch (IllegalArgumentException e) {
 			errorMessage = e.getMessage();
@@ -29,6 +30,7 @@ public class LoginCommand extends FrontCommand {
 			request.setAttribute("error-message", errorMessage);
 			forward("/login.jsp");
 		} else {
+			startSession(user);
 			// redirect to home page
 			response.sendRedirect("#");
 		}

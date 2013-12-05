@@ -490,7 +490,9 @@ h1#logo a {
 	width: 80px;
 }
 
-.loginbox a:link, .loginbox a:visited, #login_form input[type=submit] {
+.loginbox a:link, .loginbox a:visited, 
+#login_form input[type=submit],
+#register_form input[type=submit] {
 	background-color: rgb(242, 162, 35);
     background: -webkit-gradient(linear, left top, left bottom, from(rgb(242, 162, 35)), to(rgb(218, 130, 18)));
     background: -webkit-linear-gradient(top, rgb(242, 162, 35), rgb(218, 130, 18));
@@ -517,12 +519,16 @@ h1#logo a {
     text-shadow: 0 -1px 0 rgb(195, 88, 19);
 }
 
-.loginbox a:hover, #login_form input[type=submit]:hover {
+.loginbox a:hover, 
+#login_form input[type=submit]:hover,
+#register_form input[type=submit]:hover {
     opacity:.85;
     cursor: pointer;
 }
 
-.loginbox a:active, #login_form input[type=submit]:active {
+.loginbox a:active,
+#login_form input[type=submit]:active,
+#register_form input[type=submit]:active {
     border: 1px solid rgb(170, 130, 18);
     box-shadow: 0 0 10px 5px rgb(191, 192, 0) inset;
     -webkit-box-shadow:0 0 10px 5px rgb(191, 192, 0) inset;
@@ -532,12 +538,12 @@ h1#logo a {
 }
 
 /* Login Form */
-#login_form {
+#login_form, #register_form {
 	margin: 0 auto;
 	width: 250px;
 }
 
-#login_form h1 {
+#login_form h1, #register_form h1 {
 	text-align: center;
 }
 
@@ -545,23 +551,26 @@ h1#logo a {
 	color: rgb(242, 162, 35);
 }
 
-#login_form ul {
+#login_form ul, #register_form ul {
 	list-style-type: none;
 	list-style-position: outside;
 	margin: 0px;
 	padding: 0px;
 }
 
-#login_form li {
+#login_form li, #register_form li {
 	padding: 12px;
 	position: relative;
 }
 
-#login_form li:first-child,#login_form li:last-child {
+#login_form li:first-child,
+#login_form li:last-child,
+#register_form li:first-child, 
+#register_form  li:last-child {
 	border-bottom: 1px solid #777;
 }
 
-#login_form label {
+#login_form label, #register_form label {
 	display: inline-block;
 	float: left;
 	margin-top: 3px;
@@ -569,14 +578,14 @@ h1#logo a {
 	width: 100%;
 }
 
-#login_form input {
+#login_form input, #register_form input {
     border-radius:2px;
 	height: 20px;
 	padding: 5px 8px;
 	width: 90%;	
 }
 
-#login_form input[type=submit] {
+#login_form input[type=submit], #register_form input[type=submit] {
 	height: 40px;
 	padding: 0px 0px;
 	width: 100%;
@@ -601,6 +610,7 @@ h1#logo a {
 	left: -6px;
 }
 
-#login_form input:focus+.form_hint {
+#login_form input:focus+.form_hint,
+#register_form input:focus+.form_hint {
 	display: inline;
 }

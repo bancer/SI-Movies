@@ -54,8 +54,8 @@ public class UserMapper extends AbstractMapper {
 	@Override
 	protected String insertStatement() {
 		return "INSERT INTO User (address, email, first_name, last_name," +
-				" user_name, phone)" +
-				" VALUES (?, ?, ?, ?, ?, ?)";
+				" display_name, phone, username, password, salt)" +
+				" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 	}
 
 	@Override
@@ -102,13 +102,15 @@ public class UserMapper extends AbstractMapper {
 	protected void doInsert(DomainObject obj, PreparedStatement s)
 			throws SQLException {
 		User user = (User) obj;
-		System.out.println(user);
 		s.setString(1, user.getAddress());
 		s.setString(2, user.getEmail());
 		s.setString(3, user.getFirstName());
 		s.setString(4, user.getLastName());
 		s.setString(5, user.getDisplayName());
 		s.setString(6, user.getPhone());
+		s.setString(7, user.getUserName());
+		s.setString(8, user.getPassword());
+		s.setString(9, user.getSalt());
 	}
 	
 	@Override

@@ -40,9 +40,7 @@ public class SignInCommand extends FrontCommand {
 			String status = (String) obj.get("stat");
 			if(status.equals("ok")) {
 				User parsedUser = parseUserData(obj);
-
-				HttpSession session = request.getSession(true);
-				session.setAttribute("authenticated.user", parsedUser);	
+				startSession(parsedUser);	
 			} else {
 				throw new ApplicationException("Not authenticated!");
 			}

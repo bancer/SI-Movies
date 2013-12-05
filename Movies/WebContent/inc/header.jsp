@@ -18,21 +18,23 @@
 		<% if(session.getAttribute("authenticated.user") != null) { %>
 		<% User user = (User) session.getAttribute("authenticated.user"); %>
 		<ul class="nav pull-right remove">
-			<li class="dropdown pull-right"><a data-toggle="dropdown" id="username"
-				class="dropdown-toggle" href="#"> <%=user.getDisplayName()%> <b
-					class="caret"></b>
-			</a>
+			<li class="dropdown pull-right">
+				<a data-toggle="dropdown" id="username" class="dropdown-toggle" href="?command=User">
+					<%=user.getDisplayName()%> <b class="caret"></b>
+				</a>
 			 <!-- Dropdown menu -->
 				<ul class="dropdown-menu">
 				<!--<li><a href="#"><i class="icon-user"></i> Profile</a></li>
 					<li><a href="#"><i class="icon-cogs"></i> Settings</a></li> -->
 					
 				</ul></li>
-				<li><a id="logout" href="?command=SignOut" ><i class="icon-off"></i>
-							Logout</a></li>
+				<li>
+					<a id="logout" href="?command=SignOut" ><i class="icon-off"></i>Logout</a>
+				</li>
 		</ul>
 		<% } else { %>
 		<ul class="nav pull-right s">
+			<li><a id="register" class="simple_login" href="?command=Register">Register</a></li>
 			<li><a id="simple_login" class="simple_login" href="?command=Login">Log-In</a></li>
 			<li><a id="login" class="janrainEngage" href="#">Social Sign-In</a></li>
 		</ul>
