@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@page import="dk.kea.si.movies.util.Constants"%>
 <jsp:useBean 
 	id="helper" 
 	class="dk.kea.si.movies.helpers.UserHelper" 
@@ -23,13 +24,16 @@
 			
 				<form id="register_form" method="post" action="" name="register_form">
 					<input type="hidden" name="command" value="Register" />
+					<input type="hidden" 
+						name="<%=Constants.SESSION_CSRF_KEY %>" 
+						value="<%=session.getAttribute(Constants.SESSION_CSRF_KEY) %>" />
 					<ul>
 						<li>
 							<h1>Register</h1>
 						</li>
-						<% if(request.getAttribute("error.message") != null) { %>
+						<% if(request.getAttribute(Constants.ERROR_MESSAGE_KEY) != null) { %>
 							<li class='validation_error'>
-								<%=request.getAttribute("error.message")%>
+								<%=request.getAttribute(Constants.ERROR_MESSAGE_KEY)%>
 							</li>
 						<% } %>
 						<li>
