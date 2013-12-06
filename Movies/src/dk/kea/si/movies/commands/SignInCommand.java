@@ -11,7 +11,6 @@ import java.net.URLEncoder;
 import java.util.Scanner;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

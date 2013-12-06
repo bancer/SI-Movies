@@ -4,17 +4,9 @@ import java.util.ArrayList;
 
 import dk.kea.si.movies.domain.Cache;
 import dk.kea.si.movies.domain.DomainObject;
-import dk.kea.si.movies.domain.Movie;
 import dk.kea.si.movies.domain.User;
-import dk.kea.si.movies.persistence.mappers.AbstractMapper;
 import dk.kea.si.movies.persistence.mappers.CacheMapper;
 import dk.kea.si.movies.persistence.mappers.UserMapper;
-
-//import com.marv.business.entities.AuctionItem;
-//import com.marv.business.entities.DomainObject;
-//import com.marv.business.entities.User;
-//import com.marv.persistence.mappers.AuctionItemMapper;
-//import com.marv.persistence.mappers.UserMapper;
 
 public class PersistenceFacade implements Cloneable {
 
