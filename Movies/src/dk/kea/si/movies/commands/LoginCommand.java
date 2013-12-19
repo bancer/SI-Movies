@@ -1,6 +1,7 @@
 package dk.kea.si.movies.commands;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 import javax.servlet.ServletException;
 
@@ -31,6 +32,21 @@ public class LoginCommand extends FrontCommand {
 						// redirect to home page
 						response.sendRedirect(request.getContextPath());
 						return;
+					} else {
+						//TODO: If the same username is wrong for 3 consecutive
+						// times the user is not allowed to login for 5 minutes
+						Enumeration<String> attributes = request.getSession().getAttributeNames();
+						Integer count = (Integer) request.getSession().getAttribute("failed_login_count");
+						System.out.println(count);
+						if(count == null) {
+							count = 1;
+						} else if(count < 3) {
+							count++;
+						} else {
+							// block user
+							count = 0;
+						}
+						request.getSession().setAttribute("failed_login_count", count);
 					}
 				}		
 			}
