@@ -1,5 +1,6 @@
 package dk.kea.si.movies.domain;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,6 +28,8 @@ public class User extends DomainObject {
 	private String salt;
 
 	private ArrayList<OpenID> openIds;
+	
+	private Timestamp blockedUntil;
 
 	public User() {
 
@@ -196,5 +199,13 @@ public class User extends DomainObject {
 
 	public void setSalt(String salt) {
 		this.salt = salt;
+	}
+
+	public Timestamp getBlockedUntil() {
+		return blockedUntil;
+	}
+
+	public void setBlockedUntil(Timestamp blockedUntil) {
+		this.blockedUntil = blockedUntil;
 	}
 }

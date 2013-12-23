@@ -15,7 +15,7 @@ public class UserMapper extends AbstractMapper {
 
 	public static final String COLUMNS = "User.id, User.address, User.email," +
 			" User.first_name, User.last_name, User.display_name, User.phone," +
-			" User.username, User.password, User.salt";
+			" User.username, User.password, User.salt, User.blocked_until";
 
 	protected String findStatement() {
 		return "SELECT " + COLUMNS + " FROM User AS User" +
@@ -32,7 +32,8 @@ public class UserMapper extends AbstractMapper {
 	}
 
 	private String findByUsernameStatement() {
-		return "SELECT " + COLUMNS + " FROM User AS User" +
+		return "SELECT " + COLUMNS +
+				" FROM User AS User" +
 				" LEFT JOIN OpenID AS OpenID" +
 					" ON User.id=OpenID.user_id" +
 				" WHERE User.username=?" +
@@ -47,7 +48,12 @@ public class UserMapper extends AbstractMapper {
 	@Override
 	protected String updateStatement() {
 		return "UPDATE User SET address =?, email =?, first_name =?," +
-				" last_name =?, user_name =?, phone =?" +
+				" last_name =?, username =?, phone =?" +
+				" WHERE id=?";
+	}
+
+	private String blockUserStatement() {
+		return "UPDATE User SET blocked_until=NOW() + INTERVAL 5 MINUTE" +
 				" WHERE id=?";
 	}
 
@@ -73,6 +79,13 @@ public class UserMapper extends AbstractMapper {
 		return "SELECT COUNT(*) FROM User WHERE email=?;";
 	}
 
+	private String getLoginTimeoutStatement() {
+		return "SELECT TIMESTAMPDIFF(" +
+					"SECOND, NOW(), " +
+					"(SELECT blocked_until FROM User WHERE id=28)" +
+				");";
+	}
+
 	public User find(Long id) {
 		return (User) abstractFind(id);
 	}
@@ -93,6 +106,7 @@ public class UserMapper extends AbstractMapper {
 		user.setUserName(rs.getString("User.username"));
 		user.setPassword(rs.getString("User.password"));
 		user.setSalt(rs.getString("User.salt"));
+		user.setBlockedUntil(rs.getTimestamp("User.blocked_until"));
 		return user;
 	}
 
@@ -173,6 +187,42 @@ public class UserMapper extends AbstractMapper {
 				return (User) load(rs);
 			} else {
 				return null;
+			}
+		} catch (SQLException e) {
+			throw new ApplicationException(e);
+		} finally {
+			closeStatement(statement);
+		}
+	}
+
+	public void block(long userId) {
+		PreparedStatement statement = null;
+		try {
+			statement = getConnection().prepareStatement(blockUserStatement());
+			statement.setLong(1, userId);
+			System.out.println(statement);
+			statement.executeUpdate();
+			if (loadedMap.containsKey(userId)) {
+				loadedMap.remove(userId);
+			}
+		} catch (SQLException e) {
+			throw new ApplicationException(e);
+		} finally {
+			closeStatement(statement);
+		}
+	}
+
+	public long getLoginTimeout(long userId) {
+		PreparedStatement statement = null;
+		try {
+			statement = getConnection().prepareStatement(getLoginTimeoutStatement());
+			statement.setLong(1, userId);
+			System.out.println(statement);
+			ResultSet rs = statement.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			} else {
+				return 0;
 			}
 		} catch (SQLException e) {
 			throw new ApplicationException(e);

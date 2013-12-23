@@ -64,10 +64,10 @@ public abstract class FrontCommand {
 	}
 
 	private void setCSRFProtectionKey(HttpSession session) {
-		if(session.getAttribute(Constants.SESSION_CSRF_KEY) == null) {
+		//if(session.getAttribute(Constants.SESSION_CSRF_KEY) == null) {
 			String csrfKey = AppUtils.generateSalt();
 			session.setAttribute(Constants.SESSION_CSRF_KEY, csrfKey);
-		}
+		//}
 	}
 	
 	protected void setCSRFProtectionKey() {

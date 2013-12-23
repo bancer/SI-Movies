@@ -26,31 +26,43 @@ public class LoginCommand extends FrontCommand {
 			if(helper.getErrors().isEmpty()) {
 				User user = (User) getStorage().findByUserName(temp);
 				if(user != null) {
-					String hexPass = makeSaltedPassword(user);
-					if(user.getPassword().equals(hexPass)) {
-						startSession(user);
-						// redirect to home page
-						response.sendRedirect(request.getContextPath());
-						return;
+					long loginTimeout = getStorage().getUserLoginTimeout(user);
+					if(loginTimeout > 0) {
+						String message = "You cannot login during the next %s min %s sec.";
+						message = String.format(message,
+								loginTimeout / 60, 
+								loginTimeout % 60);
+						System.out.println(message);
+						request.setAttribute(Constants.ERROR_MESSAGE_KEY, message);
 					} else {
-						//TODO: If the same username is wrong for 3 consecutive
-						// times the user is not allowed to login for 5 minutes
-						Enumeration<String> attributes = request.getSession().getAttributeNames();
-						Integer count = (Integer) request.getSession().getAttribute("failed_login_count");
-						System.out.println(count);
-						if(count == null) {
-							count = 1;
-						} else if(count < 3) {
-							count++;
+						String hexPass = makeSaltedPassword(user);
+						if(user.getPassword().equals(hexPass)) {
+							startSession(user);
+							// redirect to home page
+							response.sendRedirect(request.getContextPath());
+							return;
 						} else {
-							// block user
-							count = 0;
+							//TODO: If the same username is wrong for 3 consecutive
+							// times the user is not allowed to login for 5 minutes
+							Enumeration<String> attributes = request.getSession().getAttributeNames();
+							Integer count = (Integer) request.getSession().getAttribute("failed_login_count");
+							System.out.println(count);
+							if(count == null) {
+								count = 1;
+							} else if(count < 3) {
+								count++;
+							} else {
+								getStorage().blockUser(user);
+								count = 0;
+							}
+							request.getSession().setAttribute("failed_login_count", count);
 						}
-						request.getSession().setAttribute("failed_login_count", count);
+						request.setAttribute(Constants.ERROR_MESSAGE_KEY, "Wrong username or password.");
 					}
-				}		
+				} else {
+					request.setAttribute(Constants.ERROR_MESSAGE_KEY, "Wrong username or password.");
+				}
 			}
-			request.setAttribute(Constants.ERROR_MESSAGE_KEY, "Wrong username or password.");
 		}
 		request.setAttribute("helper", helper);
 		forward("/login.jsp");
