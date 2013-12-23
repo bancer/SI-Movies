@@ -55,7 +55,7 @@ public class User extends DomainObject {
 	}
 
 	public void setPassword(String pass) {
-		this.password = AppUtils.sha256(pass);
+		this.password = pass;
 		if (pass != null && pass.length() < 1) {
 			throw new IllegalArgumentException("Password must not be empty.");
 		}

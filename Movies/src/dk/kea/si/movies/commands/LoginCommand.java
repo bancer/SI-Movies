@@ -66,7 +66,7 @@ public class LoginCommand extends FrontCommand {
 	private UserHelper initHelper(User user) {
 		UserHelper helper = new UserHelper(user);
 		helper.setUsername(request.getParameter("username"));
-		helper.setPassword(request.getParameter("password"));
+		helper.setPassword(AppUtils.sha256(request.getParameter("password")));
 		return helper;
 	}
 

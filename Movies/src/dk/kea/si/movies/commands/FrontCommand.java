@@ -63,9 +63,9 @@ public abstract class FrontCommand {
 		setCSRFProtectionKey(session);
 	}
 
-	protected void setCSRFProtectionKey(HttpSession session) {
+	private void setCSRFProtectionKey(HttpSession session) {
 		if(session.getAttribute(Constants.SESSION_CSRF_KEY) == null) {
-			String csrfKey = AppUtils.sha256(session.getId());
+			String csrfKey = AppUtils.generateSalt();
 			session.setAttribute(Constants.SESSION_CSRF_KEY, csrfKey);
 		}
 	}
@@ -82,7 +82,8 @@ public abstract class FrontCommand {
 	protected boolean hasValidCSRFToken() {
 		String submittedCSRFKey = request.getParameter(Constants.SESSION_CSRF_KEY);
 		HttpSession session = request.getSession();
-		String CSRFKey = AppUtils.sha256(session.getId());
+		//String CSRFKey = AppUtils.sha256(session.getId());
+		String CSRFKey = (String) session.getAttribute(Constants.SESSION_CSRF_KEY);
 		//System.out.println(submittedCSRFKey);
 		//System.out.println(CSRFKey);
 //		if(submittedCSRFKey == null) {

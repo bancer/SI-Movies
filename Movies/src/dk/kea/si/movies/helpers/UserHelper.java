@@ -69,7 +69,7 @@ public class UserHelper extends AHelper {
 	}
 	
 	public void comparePassword(String pass) {
-		if(!user.getPassword().equals(AppUtils.sha256(pass))) {
+		if(!user.getPassword().equals(pass)) {
 			getErrors().put("repeatpassword", "Passwords do not match.");
 		}
 	}
