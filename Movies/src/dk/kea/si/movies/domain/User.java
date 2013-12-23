@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import dk.kea.si.movies.util.AppUtils;
-
 public class User extends DomainObject {
 
 	private static final int MAX_OPEN_IDS = 6;
@@ -55,7 +53,7 @@ public class User extends DomainObject {
 	}
 
 	public void setPassword(String pass) {
-		this.password = pass;
+		this.password = pass;		
 		if (pass != null && pass.length() < 1) {
 			throw new IllegalArgumentException("Password must not be empty.");
 		}

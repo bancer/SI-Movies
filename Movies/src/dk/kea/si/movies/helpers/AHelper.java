@@ -14,7 +14,8 @@ public abstract class AHelper implements Serializable {
 		if(errors == null || !errors.containsKey(fieldName)) {
 			return "";
 		} else {
-			return errors.get(fieldName);
+			String message = errors.get(fieldName);
+			return message.replaceAll("(\r\n|\n\r|\n)", "<br />");
 		}
 	}
 	
