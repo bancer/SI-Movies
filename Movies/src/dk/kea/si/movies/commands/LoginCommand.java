@@ -1,7 +1,6 @@
 package dk.kea.si.movies.commands;
 
 import java.io.IOException;
-import java.util.Enumeration;
 
 import javax.servlet.ServletException;
 
@@ -12,6 +11,8 @@ import dk.kea.si.movies.util.Constants;
 
 public class LoginCommand extends FrontCommand {
 
+	private static final int MAX_LOGIN_ATTEMPTS = 3;
+
 	@Override
 	public void process() throws ServletException, IOException {
 		setCSRFProtectionKey();
@@ -20,52 +21,53 @@ public class LoginCommand extends FrontCommand {
 
 	@Override
 	public void processPost() throws ServletException, IOException {
-		User temp = new User();
-		UserHelper helper = initHelper(temp);
+		UserHelper helper = initHelper(new User());
+		request.setAttribute("helper", helper);
+		User user = authenticate(helper);
+		if(user != null) {
+			startSession(user);
+			// redirect to home page
+			response.sendRedirect(request.getContextPath());
+			return;
+		} else {
+			forward("/login.jsp");
+		}
+	}
+	
+	private User authenticate(UserHelper helper) {
 		if(hasValidCSRFToken()) {
 			if(helper.getErrors().isEmpty()) {
-				User user = (User) getStorage().findByUserName(temp);
+				String message = "Wrong username or password.";
+				User user = (User) getStorage().findByUserName(helper.getUser());
 				if(user != null) {
-					long loginTimeout = getStorage().getUserLoginTimeout(user);
+					long loginTimeout = getStorage().getUserLoginTimeout(user.getId());
 					if(loginTimeout > 0) {
-						String message = "You cannot login during the next %s min %s sec.";
-						message = String.format(message,
-								loginTimeout / 60, 
-								loginTimeout % 60);
-						System.out.println(message);
-						request.setAttribute(Constants.ERROR_MESSAGE_KEY, message);
+						message = String.format(
+								"You cannot login during the next %s min %s sec.",
+								loginTimeout / 60, loginTimeout % 60);
 					} else {
 						String hexPass = makeSaltedPassword(user);
 						if(user.getPassword().equals(hexPass)) {
-							startSession(user);
-							// redirect to home page
-							response.sendRedirect(request.getContextPath());
-							return;
+							return user;
 						} else {
-							//TODO: If the same username is wrong for 3 consecutive
-							// times the user is not allowed to login for 5 minutes
-							Enumeration<String> attributes = request.getSession().getAttributeNames();
-							Integer count = (Integer) request.getSession().getAttribute("failed_login_count");
-							System.out.println(count);
-							if(count == null) {
-								count = 1;
-							} else if(count < 3) {
-								count++;
-							} else {
-								getStorage().blockUser(user);
-								count = 0;
+							Integer leftLoginAttempts = (Integer) request.getSession().getAttribute("failed_login_countdown");
+							if(leftLoginAttempts == null || leftLoginAttempts < 0) {
+								leftLoginAttempts = MAX_LOGIN_ATTEMPTS - 1;
 							}
-							request.getSession().setAttribute("failed_login_count", count);
+							if (leftLoginAttempts == 0) {
+								getStorage().blockUser(user);
+							}
+							message = String.format(
+									message + "\nYou have %s attempts left.", 
+									leftLoginAttempts);
+							request.getSession().setAttribute("failed_login_countdown", --leftLoginAttempts);
 						}
-						request.setAttribute(Constants.ERROR_MESSAGE_KEY, "Wrong username or password.");
 					}
-				} else {
-					request.setAttribute(Constants.ERROR_MESSAGE_KEY, "Wrong username or password.");
 				}
+				helper.setError(Constants.ERROR_MESSAGE_KEY, message);
 			}
 		}
-		request.setAttribute("helper", helper);
-		forward("/login.jsp");
+		return null;
 	}
 
 	private String makeSaltedPassword(User user) {

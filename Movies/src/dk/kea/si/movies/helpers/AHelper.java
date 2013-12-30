@@ -19,6 +19,10 @@ public abstract class AHelper implements Serializable {
 		}
 	}
 	
+	public void setError(String key, String value) {
+		getErrors().put(key, value);
+	}
+	
 	public Map<String, String> getErrors() {
 		if(errors == null) {
 			errors = new HashMap<String, String>();

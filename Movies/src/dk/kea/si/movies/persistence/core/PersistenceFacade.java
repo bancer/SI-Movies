@@ -122,8 +122,8 @@ public class PersistenceFacade implements Cloneable {
 		mapper.block(user.getId());
 	}
 
-	public long getUserLoginTimeout(User user) {
+	public long getUserLoginTimeout(long userId) {
 		UserMapper mapper = (UserMapper) mapperFactory.getMapper(User.class);
-		return mapper.getLoginTimeout(user.getId());
+		return mapper.getLoginTimeout(userId);
 	}
 }

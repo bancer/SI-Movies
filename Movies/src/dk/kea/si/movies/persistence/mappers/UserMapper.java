@@ -53,8 +53,8 @@ public class UserMapper extends AbstractMapper {
 	}
 
 	private String blockUserStatement() {
-		return "UPDATE User SET blocked_until=NOW() + INTERVAL 5 MINUTE" +
-				" WHERE id=?";
+		return 
+			"UPDATE User SET blocked_until=NOW() + INTERVAL 5 MINUTE WHERE id=?";
 	}
 
 	@Override
@@ -81,8 +81,7 @@ public class UserMapper extends AbstractMapper {
 
 	private String getLoginTimeoutStatement() {
 		return "SELECT TIMESTAMPDIFF(" +
-					"SECOND, NOW(), " +
-					"(SELECT blocked_until FROM User WHERE id=28)" +
+					"SECOND, NOW(), (SELECT blocked_until FROM User WHERE id=?)" +
 				");";
 	}
 

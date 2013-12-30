@@ -137,4 +137,8 @@ public class UserHelper extends AHelper {
 		}
 
 	}
+
+	public User getUser() {
+		return this.user;
+	}
 }
