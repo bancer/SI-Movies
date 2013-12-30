@@ -17,8 +17,6 @@ import dk.kea.si.movies.util.Constants;
 
 public abstract class FrontCommand {
 
-	private static final String SESSION_USER_KEY = "authenticated.user";
-
 	protected ServletContext context;
 	
 	protected HttpServletRequest request;
@@ -59,7 +57,7 @@ public abstract class FrontCommand {
 
 	protected void startSession(User user) {
 		HttpSession session = request.getSession(true);
-		session.setAttribute(SESSION_USER_KEY, user);
+		session.setAttribute(Constants.SESSION_USER_KEY, user);
 		setCSRFProtectionKey(session);
 	}
 
