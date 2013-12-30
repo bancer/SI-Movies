@@ -30,7 +30,7 @@ public abstract class AHelper implements Serializable {
 		return errors;
 	}
 	
-	protected String escapeXml(String str) {
+	protected String sanitize(String str) {
 		return StringEscapeUtils.escapeXml(str);
 	}
 }

@@ -46,7 +46,7 @@ public class UserHelper extends AHelper {
 	
 	public String getUsername() {
 		if(user.getUserName() != null) {
-			return escapeXml(user.getUserName());
+			return sanitize(user.getUserName());
 		} else {
 			return ""; 
 		}
@@ -62,7 +62,7 @@ public class UserHelper extends AHelper {
 	
 	public String getPassword() {
 		if(user.getPassword() != null) {
-			return escapeXml(user.getPassword());
+			return sanitize(user.getPassword());
 		} else {
 			return ""; 
 		}
@@ -78,7 +78,7 @@ public class UserHelper extends AHelper {
 	
 	public String getEmail() {
 		if(user.getEmail() != null) {
-			return escapeXml(user.getEmail());
+			return sanitize(user.getEmail());
 		} else {
 			return ""; 
 		}
