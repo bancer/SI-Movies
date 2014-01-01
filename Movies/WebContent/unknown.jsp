@@ -12,13 +12,13 @@
 </head>
 <body>
 	<div id="shell">
-		<%@ include file="inc/header.jsp"%>
+		<%@ include file="inc/header.jspf"%>
 		<div class="main">
 			<div class="content">
-				<h1>Unknown Command</h1>
+				<h1>Page Not Found</h1>
 			</div>
 		</div>
-		<%@ include file="inc/footer.jsp"%>
+		<%@ include file="inc/footer.jspf"%>
 	</div>
 </body>
 </html>

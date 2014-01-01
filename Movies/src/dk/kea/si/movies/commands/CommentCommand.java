@@ -5,9 +5,10 @@ import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 
+import dk.kea.si.movies.domain.Comment;
 import dk.kea.si.movies.helpers.CommentHelper;
 
-public class SaveCommentCommand extends FrontCommand {
+public class CommentCommand extends FrontCommand {
 
 	@Override
 	public void process() throws ServletException, IOException {
@@ -18,7 +19,13 @@ public class SaveCommentCommand extends FrontCommand {
 
 	@Override
 	public void processPost() throws ServletException, IOException {
+		Comment comment = new Comment();
 		CommentHelper helper = new CommentHelper();
+		if(hasValidCSRFToken()) {
+			if(helper.getErrors().isEmpty()) {
+				
+			}
+		}
 		//System.out.println(request.getAttributeNames().toString());
 		//TODO: get the comment data from the request and save it to the database
 		// then sanitize the user supplied data and return it with PrintWriter

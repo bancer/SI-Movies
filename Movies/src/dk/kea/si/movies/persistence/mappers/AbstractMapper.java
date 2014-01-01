@@ -6,10 +6,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 
 import dk.kea.si.movies.domain.DomainObject;
@@ -319,6 +321,12 @@ public abstract class AbstractMapper {
 	 */
 	protected Date calendarToDate(Calendar calendar) {
 		return new Date(calendar.getTime().getTime());
+	}
+
+	protected Calendar timestampToCalendar(Timestamp timestamp) {
+		Calendar localTime = Calendar.getInstance(TimeZone.getDefault());
+		localTime.setTimeInMillis(timestamp.getTime());
+		return localTime;
 	}
 	
 	protected AbstractMapper getMapper(Class<? extends Object> domainClass) {

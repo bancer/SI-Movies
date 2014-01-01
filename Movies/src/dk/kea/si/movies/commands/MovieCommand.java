@@ -23,7 +23,13 @@ public class MovieCommand extends FrontCommand {
 
 	@Override
 	public void process() throws ServletException, IOException {
+		setCSRFProtectionKey();
+		
 		String id = request.getParameter("id");
+		if(!id.matches("\\d+")) { // if id is not a digit
+			forward("/unknown.jsp");
+			return;
+		}
 		Movie movie = retrieveCachedMovie(id);
 		
 		Reviews reviews = retrieveCachedReviews(id);

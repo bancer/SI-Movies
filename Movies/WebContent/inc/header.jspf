@@ -1,3 +1,4 @@
+<%@page import="dk.kea.si.movies.util.Constants"%>
 <%@page import="dk.kea.si.movies.domain.User"%>
 <!-- Header -->
 <div id="header">
@@ -15,8 +16,8 @@
 	</div>
 	<div class="loginbox">
 		<!-- Links -->
-		<% if(session.getAttribute("authenticated.user") != null) { %>
-		<% User user = (User) session.getAttribute("authenticated.user"); %>
+		<% if(session.getAttribute(Constants.SESSION_USER_KEY) != null) { %>
+		<% User user = (User) session.getAttribute(Constants.SESSION_USER_KEY); %>
 		<ul class="nav pull-right remove">
 			<li class="dropdown pull-right">
 				<a data-toggle="dropdown" id="username" class="dropdown-toggle" href="?command=User">

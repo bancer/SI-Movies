@@ -13,10 +13,13 @@
 	
 	<base href="<%=request.getContextPath()%>/" />
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script src="js/movie.js"></script>
+	
 </head>
 <body>		
 	<div id="shell">
-		<%@ include file="inc/header.jsp"%>
+		<%@ include file="inc/header.jspf"%>
 
 		<div id="main">
 			<div id="content">
@@ -66,24 +69,48 @@
 				</div>
 			</div>
 			<div>
-				<h4>Trailers:</h4>
-				<% for (int i = 0; i < googleVideos.size(); i++) { %>
-				<div>
-					<h3><%=googleVideos.get(i).getTitle()%></h3>
-					<iframe width="640" height="390"
-						src="http://www.youtube.com/embed/<%= googleVideos.get(i).getId() %>?autoplay=0"
-						frameborder="1" allowfullscreen></iframe>
+				<h4 class="toggleable">Trailers</h4>
+				<div class="hidden_on_load">
+					<% for (int i = 0; i < googleVideos.size(); i++) { %>
+					<div>
+						<h3><%=googleVideos.get(i).getTitle()%></h3>
+						<iframe width="640" height="390"
+							src="http://www.youtube.com/embed/<%= googleVideos.get(i).getId() %>?autoplay=0"
+							frameborder="1" allowfullscreen></iframe>
+					</div>
+					<% } %>
 				</div>
-				<% } %>
 			</div>
 			
 			<div>
-				<h4>Wikipedia:</h4>
-				<%=request.getAttribute("wikiPage")%>
+				<h4 class="toggleable">Wikipedia</h4>
+				<div class="hidden_on_load">
+					<%=request.getAttribute("wikiPage")%>
+				</div>
+			</div>
+			
+			<div>
+				<h4 class="toggleable">Comments</h4>
+				<div class="hidden_on_load">
+					<% if(session.getAttribute(Constants.SESSION_USER_KEY) != null) { %>
+					<% User user = (User) session.getAttribute(Constants.SESSION_USER_KEY); %>
+					<form id="comment_form">
+						<input type="hidden" name="command" value="Comment" />
+						<input type="hidden" 
+							name="<%=Constants.SESSION_CSRF_KEY %>" 
+							value="<%=session.getAttribute(Constants.SESSION_CSRF_KEY) %>" />
+						<input type="hidden" name="movie_id" value="<%=movie.getId() %>" />
+						<input type="hidden" name="user_id" value="<%=user.getId() %>" />
+						<input type="hidden" name="parent_id" value="" />
+						<textarea id="comment_text" name="comment_text"></textarea>
+						<input type="submit" value="Submit" />
+					</form>
+					<% } %>
+				</div>
 			</div>
 		</div>
 
-		<%@ include file="inc/footer.jsp"%>
+		<%@ include file="inc/footer.jspf"%>
 	</div>
 </body>
 </html>

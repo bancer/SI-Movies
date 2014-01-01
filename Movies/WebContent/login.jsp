@@ -16,7 +16,7 @@
 </head>
 <body>		
 	<div id="shell">
-		<%@ include file="inc/header.jsp"%>
+		<%@ include file="inc/header.jspf"%>
 
 		<div id="main">
 			<div id="content">
@@ -29,9 +29,9 @@
 						<li>
 							<h1>Login</h1>
 						</li>
-						<% if(request.getAttribute(Constants.ERROR_MESSAGE_KEY) != null) { %>
+						<% if(helper.getError(Constants.ERROR_MESSAGE_KEY) != null) { %>
 							<li class='validation_error'>
-								<%=request.getAttribute(Constants.ERROR_MESSAGE_KEY)%>
+								<%=helper.getError(Constants.ERROR_MESSAGE_KEY)%>
 							</li>
 						<% } %>
 						<li>
@@ -55,7 +55,7 @@
 			</div>
 		</div>
 
-		<%@ include file="inc/footer.jsp"%>
+		<%@ include file="inc/footer.jspf"%>
 	</div>
 </body>
 </html>
