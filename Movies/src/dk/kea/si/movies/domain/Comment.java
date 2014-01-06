@@ -8,6 +8,8 @@ public class Comment extends DomainObject {
 	
 	private long userId;
 	
+	private User user;
+	
 	private long parentId;
 	
 	private long lastEditorId;
@@ -21,8 +23,8 @@ public class Comment extends DomainObject {
 	@Override
 	public String toString() {
 		return String
-				.format("Comment [movieId=%s, userId=%s, parentId=%s, lastEditorId=%s, comment=%s, timePosted=%s, lastTimeEdited=%s, getId()=%s]",
-						movieId, userId, parentId, lastEditorId, comment,
+				.format("Comment [movieId=%s, userId=%s, user=%s, parentId=%s, lastEditorId=%s, comment=%s, timePosted=%s, lastTimeEdited=%s, getId()=%s]",
+						movieId, userId, user, parentId, lastEditorId, comment,
 						timePosted, lastTimeEdited, getId());
 	}
 
@@ -92,5 +94,13 @@ public class Comment extends DomainObject {
 
 	public void setLastTimeEdited(Calendar lastTimeEdited) {
 		this.lastTimeEdited = lastTimeEdited;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 }

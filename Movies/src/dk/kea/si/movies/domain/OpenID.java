@@ -32,8 +32,12 @@ public class OpenID extends DomainObject {
 	public void setUserId(long userId) {
 		this.userId = userId;
 	}
-	
+
+	@Override
 	public String toString() {
-		return "[" + identifier + "," + provider + "]";
+		return String.format(
+				"OpenID [identifier=%s, provider=%s, userId=%s, getId()=%s]",
+				identifier, provider, userId, getId());
 	}
+	
 }

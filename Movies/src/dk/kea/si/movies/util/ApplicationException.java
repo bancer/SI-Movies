@@ -2,6 +2,8 @@ package dk.kea.si.movies.util;
 
 
 public class ApplicationException extends RuntimeException {
+	
+	public static final String AUTH_EXCEPTION = "Only authenticated users are allowed to access this page.";
 
 //	public ApplicationException() {
 //		// TODO Auto-generated constructor stub

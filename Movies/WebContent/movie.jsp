@@ -2,9 +2,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <jsp:useBean id="movie" scope="request"
-	class="dk.kea.si.movies.domain.Movie"></jsp:useBean>
+	class="dk.kea.si.movies.domain.Movie" />
 <jsp:useBean id="googleVideos" scope="request" 
-	type="java.util.ArrayList<dk.kea.si.movies.domain.GoogleVideo>"></jsp:useBean>
+	type="java.util.ArrayList<dk.kea.si.movies.domain.GoogleVideo>" />
+<jsp:useBean id="commentsHelper" scope="request"
+	class="dk.kea.si.movies.helpers.CommentsListHelper" />
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -92,15 +94,23 @@
 			<div>
 				<h4 class="toggleable">Comments</h4>
 				<div class="hidden_on_load">
+					<% if(commentsHelper.size() > 0) { %>
+						<ul id="comments_list">
+							<% for(int i = 0; i < commentsHelper.size(); i++) { %>
+								<li>
+									<h3><%= commentsHelper.getAuthorDisplayName(i) %></h3>
+									<%= commentsHelper.getCommentText(i) %>
+								</li>
+							<% } %>
+						</ul>
+					<% } %>
 					<% if(session.getAttribute(Constants.SESSION_USER_KEY) != null) { %>
-					<% User user = (User) session.getAttribute(Constants.SESSION_USER_KEY); %>
 					<form id="comment_form">
 						<input type="hidden" name="command" value="Comment" />
 						<input type="hidden" 
 							name="<%=Constants.SESSION_CSRF_KEY %>" 
 							value="<%=session.getAttribute(Constants.SESSION_CSRF_KEY) %>" />
 						<input type="hidden" name="movie_id" value="<%=movie.getId() %>" />
-						<input type="hidden" name="user_id" value="<%=user.getId() %>" />
 						<input type="hidden" name="parent_id" value="" />
 						<textarea id="comment_text" name="comment_text"></textarea>
 						<input type="submit" value="Submit" />

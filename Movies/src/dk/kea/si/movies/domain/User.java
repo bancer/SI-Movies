@@ -144,14 +144,11 @@ public class User extends DomainObject {
 
 	@Override
 	public String toString() {
-		String result = "[" + getId() + ", " + address + ", " + email + ", " + firstName + ", "
-				+ lastName + ", " + password + ", "
-				+ phone + ", " + displayName + ", [";
-		for (int i = 0; i < openIds.size(); i++) {
-			result += openIds.get(i).toString();
-		}
-		result += "] ]";
-		return result;
+		return String
+				.format("User [displayName=%s, password=%s, email=%s, phone=%s, address=%s, firstName=%s, lastName=%s, userName=%s, salt=%s, openIds=%s, blockedUntil=%s, getId()=%s]",
+						displayName, password, email, phone, address,
+						firstName, lastName, userName, salt, openIds,
+						blockedUntil, getId());
 	}
 
 	public ArrayList<OpenID> getOpenIds() {

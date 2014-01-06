@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import dk.kea.si.movies.domain.User;
 import dk.kea.si.movies.persistence.core.PersistenceFacade;
 import dk.kea.si.movies.util.AppUtils;
+import dk.kea.si.movies.util.ApplicationException;
 import dk.kea.si.movies.util.Constants;
 
 
@@ -102,6 +103,16 @@ public abstract class FrontCommand {
 			request.setAttribute(Constants.ERROR_MESSAGE_KEY, msg);
 			//TODO: log possible CSRF attempt
 			return false;
+		}
+	}
+	
+	protected boolean isAuthenticatedUser() {
+		return request.getSession().getAttribute(Constants.SESSION_USER_KEY) != null;
+	}
+	
+	protected void rejectUnauthenticatedUser() {
+		if(!isAuthenticatedUser()) {
+			throw new ApplicationException(ApplicationException.AUTH_EXCEPTION);
 		}
 	}
 }

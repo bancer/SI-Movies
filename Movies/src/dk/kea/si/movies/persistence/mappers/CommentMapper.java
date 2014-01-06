@@ -3,12 +3,11 @@ package dk.kea.si.movies.persistence.mappers;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.TimeZone;
+import java.sql.Types;
 
 import dk.kea.si.movies.domain.Comment;
 import dk.kea.si.movies.domain.DomainObject;
+import dk.kea.si.movies.domain.User;
 
 public class CommentMapper extends AbstractMapper {
 	
@@ -43,6 +42,17 @@ public class CommentMapper extends AbstractMapper {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	protected String findLatestListByMovieIdStatement() {
+		return "SELECT " + COLUMNS + ", " + UserMapper.COLUMNS + 
+				" FROM Comment AS Comment" +
+				" LEFT JOIN User AS User" +
+				" ON Comment.user_id=User.id" +
+				" WHERE Comment.movie_id=?" +
+				" ORDER BY COALESCE(Comment.last_time_edited, Comment.time_posted) DESC" +
+				" LIMIT 20";
+	}
 
 	@Override
 	protected String updateStatement() {
@@ -73,6 +83,12 @@ public class CommentMapper extends AbstractMapper {
 		comment.setComment(rs.getString(COMMENT));
 		comment.setTimePosted(timestampToCalendar(rs.getTimestamp(TIME_POSTED)));
 		comment.setLastTimeEdited(timestampToCalendar(rs.getTimestamp(LAST_TIME_EDITED)));
+
+		if(resultSetContainsColumn(rs, UserMapper.ID)) {
+			User user = (User) getMapper(User.class).doLoad(rs.getLong(UserMapper.ID), rs);
+			comment.setUser(user);
+		}
+		//System.out.println(comment.getUser());
 		return comment;
 	}
 
@@ -89,7 +105,11 @@ public class CommentMapper extends AbstractMapper {
 		Comment comment = (Comment) o;
 		s.setLong(1, comment.getMovieId());
 		s.setLong(2, comment.getUserId());
-		s.setLong(3, comment.getParentId());
+		if(comment.getParentId() > 0) {
+			s.setLong(3, comment.getParentId());
+		} else {
+			s.setNull(3, Types.INTEGER);
+		}
 		s.setString(4, comment.getComment());
 	}
 

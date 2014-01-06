@@ -13,9 +13,32 @@ import dk.kea.si.movies.util.ApplicationException;
 
 public class UserMapper extends AbstractMapper {
 
-	public static final String COLUMNS = "User.id, User.address, User.email," +
-			" User.first_name, User.last_name, User.display_name, User.phone," +
-			" User.username, User.password, User.salt, User.blocked_until";
+	public static final String ID = "User.id";
+
+	private static final String ADDRESS = "User.address";
+
+	private static final String EMAIL = "User.email";
+
+	private static final String FIRST_NAME = "User.first_name";
+
+	private static final String LAST_NAME = "User.last_name";
+
+	private static final String DISPLAY_NAME = "User.display_name";
+
+	private static final String PHONE = "User.phone";
+
+	private static final String USERNAME = "User.username";
+
+	private static final String PASSWORD = "User.password";
+
+	private static final String SALT = "User.salt";
+
+	private static final String BLOCKED_UNTIL = "User.blocked_until";
+	
+	public static final String COLUMNS = ID + ", " + ADDRESS + ", " + EMAIL
+			+ ", " + FIRST_NAME + ", " + LAST_NAME + ", " + DISPLAY_NAME + ", "
+			+ PHONE + ", " + USERNAME + ", " + PASSWORD + ", " + SALT + ", "
+			+ BLOCKED_UNTIL;
 
 	protected String findStatement() {
 		return "SELECT " + COLUMNS + " FROM User AS User" +
@@ -95,17 +118,17 @@ public class UserMapper extends AbstractMapper {
 
 	protected DomainObject doLoad(Long id, ResultSet rs) throws SQLException {
 		User user = new User();
-		user.setId(rs.getLong("User.id"));
-		user.setAddress(rs.getString("User.address"));
-		user.setEmail(rs.getString("User.email"));
-		user.setFirstName(rs.getString("User.first_name"));
-		user.setLastName(rs.getString("User.last_name"));
-		user.setDisplayName(rs.getString("User.display_name"));
-		user.setPhone(rs.getString("User.phone"));
-		user.setUserName(rs.getString("User.username"));
-		user.setPassword(rs.getString("User.password"));
-		user.setSalt(rs.getString("User.salt"));
-		user.setBlockedUntil(rs.getTimestamp("User.blocked_until"));
+		user.setId(rs.getLong(ID));
+		user.setAddress(rs.getString(ADDRESS));
+		user.setEmail(rs.getString(EMAIL));
+		user.setFirstName(rs.getString(FIRST_NAME));
+		user.setLastName(rs.getString(LAST_NAME));
+		user.setDisplayName(rs.getString(DISPLAY_NAME));
+		user.setPhone(rs.getString(PHONE));
+		user.setUserName(rs.getString(USERNAME));
+		user.setPassword(rs.getString(PASSWORD));
+		user.setSalt(rs.getString(SALT));
+		user.setBlockedUntil(rs.getTimestamp(BLOCKED_UNTIL));
 		return user;
 	}
 
