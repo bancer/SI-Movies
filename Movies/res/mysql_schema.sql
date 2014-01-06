@@ -97,7 +97,8 @@ DROP TABLE IF EXISTS `movies`.`Actor` ;
 CREATE TABLE IF NOT EXISTS `movies`.`Actor` (
   `id` INT NOT NULL,
   `name` VARCHAR(50) NOT NULL,
-  PRIMARY KEY (`id`))
+  PRIMARY KEY (`id`),
+  INDEX `name` (`name` ASC))
 ENGINE = InnoDB;
 
 
@@ -239,10 +240,17 @@ CREATE TABLE IF NOT EXISTS `movies`.`User` (
   `email` VARCHAR(255) NULL,
   `first_name` VARCHAR(255) NULL,
   `last_name` VARCHAR(255) NULL,
-  `user_name` VARCHAR(255) NOT NULL,
+  `display_name` VARCHAR(255) NULL,
   `phone` VARCHAR(45) NULL,
+  `username` VARCHAR(20) NULL,
+  `password` CHAR(64) NULL,
+  `salt` CHAR(64) NULL,
+  `blocked_until` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `user_name` (`user_name` ASC))
+  UNIQUE INDEX `idx_display_name` (`display_name` ASC),
+  UNIQUE INDEX `idx_username` (`username` ASC),
+  UNIQUE INDEX `email` (`email` ASC),
+  INDEX `idx_password` (`password` ASC))
 ENGINE = InnoDB;
 
 
@@ -352,6 +360,50 @@ CREATE TABLE IF NOT EXISTS `movies`.`MovieDirector` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `movies`.`Comment`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `movies`.`Comment` ;
+
+CREATE TABLE IF NOT EXISTS `movies`.`Comment` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `movie_id` INT NOT NULL,
+  `user_id` INT NOT NULL,
+  `parent_id` INT NULL,
+  `last_editor_id` INT NULL,
+  `comment` TEXT NOT NULL,
+  `time_posted` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_time_edited` TIMESTAMP NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_Comment_Comment1_idx` (`parent_id` ASC),
+  INDEX `fk_Comment_User1_idx` (`user_id` ASC),
+  INDEX `fk_Comment_Movie1_idx` (`movie_id` ASC),
+  INDEX `fk_Comment_User2_idx` (`last_editor_id` ASC),
+  INDEX `time_posted` (`time_posted` ASC),
+  INDEX `last_time_edited` (`last_time_edited` ASC),
+  CONSTRAINT `fk_Comment_Comment1`
+    FOREIGN KEY (`parent_id`)
+    REFERENCES `movies`.`Comment` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Comment_Movie1`
+    FOREIGN KEY (`movie_id`)
+    REFERENCES `movies`.`Movie` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Comment_User1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `movies`.`User` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Comment_User2`
+    FOREIGN KEY (`last_editor_id`)
+    REFERENCES `movies`.`User` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
 USE `movies` ;
 
 -- -----------------------------------------------------
@@ -401,6 +453,28 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 USE `movies`;
 
 DELIMITER $$
+
+USE `movies`$$
+DROP TRIGGER IF EXISTS `movies`.`UserInsertTrigger` $$
+USE `movies`$$
+CREATE
+DEFINER=`root`@`localhost`
+TRIGGER `movies`.`UserInsertTrigger`
+BEFORE INSERT ON `movies`.`User`
+FOR EACH ROW
+BEGIN
+IF NEW.display_name IS NULL OR NEW.display_name = ''
+THEN
+	IF(NEW.username IS NOT NULL AND NEW.username != '') THEN
+		SET NEW.display_name = NEW.username;
+	ELSEIF (NEW.email IS NOT NULL AND NEW.email != '') THEN
+		SET NEW.display_name = NEW.email;
+	ELSE
+		SET NEW.display_name = NEW.id;
+	END IF;
+END IF;
+END$$
+
 
 USE `movies`$$
 DROP TRIGGER IF EXISTS `movies`.`UserRatingInsertTrigger` $$
