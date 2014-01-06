@@ -15,8 +15,12 @@ public abstract class AHelper implements Serializable {
 			return "";
 		} else {
 			String message = errors.get(fieldName);
-			return message.replaceAll("(\r\n|\n\r|\n)", "<br />");
+			return breakLinesToHtml(message);
 		}
+	}
+	
+	protected String breakLinesToHtml(String str) {
+		return str.replaceAll("(\r\n|\n\r|\n)", "<br />");
 	}
 	
 	public void setError(String key, String value) {

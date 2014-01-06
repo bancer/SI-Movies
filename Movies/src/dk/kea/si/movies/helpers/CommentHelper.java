@@ -1,6 +1,7 @@
 package dk.kea.si.movies.helpers;
 
 import dk.kea.si.movies.domain.Comment;
+import dk.kea.si.movies.domain.User;
 
 public class CommentHelper extends AHelper {
 
@@ -39,6 +40,7 @@ public class CommentHelper extends AHelper {
 
 	public void setCommentText(String commentText) {
 		try {
+			commentText = breakLinesToHtml(commentText);
 			comment.setComment(commentText);
 		} catch (IllegalArgumentException e) {
 			getErrors().put("comment_text", e.getMessage());
@@ -70,10 +72,15 @@ public class CommentHelper extends AHelper {
 	}
 	
 	public String getAuthorDisplayName() {
+		//System.out.println("x:"+comment.getUser().getDisplayName());
 		if(comment.getUser() != null) {
 			return sanitize(comment.getUser().getDisplayName());
 		} else {
 			return "";
 		}
+	}
+
+	public void setUser(User user) {
+		comment.setUser(user);
 	}
 }

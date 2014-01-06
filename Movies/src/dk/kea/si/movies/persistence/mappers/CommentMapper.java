@@ -33,8 +33,11 @@ public class CommentMapper extends AbstractMapper {
 
 	@Override
 	protected String findStatement() {
-		// TODO Auto-generated method stub
-		return null;
+		return "SELECT " + COLUMNS + " FROM Comment AS Comment" +
+				" LEFT JOIN User AS User" +
+				" ON Comment.user_id=User.id" +
+				" WHERE Comment.id=?" +
+				" LIMIT 1;";
 	}
 
 	@Override
@@ -51,7 +54,7 @@ public class CommentMapper extends AbstractMapper {
 				" ON Comment.user_id=User.id" +
 				" WHERE Comment.movie_id=?" +
 				" ORDER BY COALESCE(Comment.last_time_edited, Comment.time_posted) DESC" +
-				" LIMIT 20";
+				" LIMIT 20;";
 	}
 
 	@Override
@@ -84,8 +87,10 @@ public class CommentMapper extends AbstractMapper {
 		comment.setTimePosted(timestampToCalendar(rs.getTimestamp(TIME_POSTED)));
 		comment.setLastTimeEdited(timestampToCalendar(rs.getTimestamp(LAST_TIME_EDITED)));
 
-		if(resultSetContainsColumn(rs, UserMapper.ID)) {
-			User user = (User) getMapper(User.class).doLoad(rs.getLong(UserMapper.ID), rs);
+		if (resultSetContainsColumn(rs, UserMapper.ID)) {
+			User user = (User) getMapper(User.class).doLoad(
+					rs.getLong(UserMapper.ID), rs);
+			System.out.println(user);
 			comment.setUser(user);
 		}
 		//System.out.println(comment.getUser());
@@ -122,8 +127,7 @@ public class CommentMapper extends AbstractMapper {
 
 	@Override
 	public DomainObject find(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return (Comment) abstractFind(id);
 	}
 
 }

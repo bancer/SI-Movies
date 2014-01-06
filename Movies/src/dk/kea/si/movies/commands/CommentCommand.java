@@ -18,9 +18,19 @@ public class CommentCommand extends FrontCommand {
 
 	@Override
 	public void process() throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//System.out.println("get save command");
-		//processPost();
+		response.setContentType("text/HTML");
+		PrintWriter out = response.getWriter();
+		String id = request.getParameter("id");
+		if (!id.matches("\\d+")) { // if id is not a digit
+			return;
+		}
+		Comment comment = (Comment) getStorage().find(Long.parseLong(id),
+				Comment.class);
+		String format = "{\"author\":\"%s\", \"text\":\"%s\"}";
+		String json = String.format(format, comment.getUser()
+				.getDisplayName(), comment.getComment());
+		out.println(json);
+		out.flush();
 	}
 
 	@Override
@@ -38,16 +48,12 @@ public class CommentCommand extends FrontCommand {
 			if(helper.getErrors().isEmpty()) {
 				//boolean id = getStorage().save(helper.getComment());
 				long id = getStorage().insert(helper.getComment());
-				out.println(id);
+				out.print(id);
 				//out.println(new Gson().toJson(helper.getComment()));
 			} else {
 				out.println(new JSONObject(helper.getErrors()));
 			}
 		}
-		//System.out.println(request.getAttributeNames().toString());
-		//TODO: get the comment data from the request and save it to the database
-		// then sanitize the user supplied data and return it with PrintWriter
-		//out.println("success");
 		out.flush();
 	}
 
@@ -58,6 +64,7 @@ public class CommentCommand extends FrontCommand {
 		helper.setCommentText(request.getParameter("comment_text"));		
 		User user = (User) request.getSession().getAttribute(Constants.SESSION_USER_KEY);
 		helper.setUserId(user.getId());
+		helper.setUser(user);
 		return helper;
 	}
 

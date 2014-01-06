@@ -33,13 +33,21 @@ $(document).ready(function() {
 			url: "default.jsp",
 			data: $(this).serialize(),
 			success: function(msg){
-				alert("Data Saved: " + msg );
-	            //$("#result").html('Submitted successfully');
+				prependComment(msg);
+				$("#comment_text").val("");
 	        },
-	        error: function(jqXHR, textStatus){
-	            alert("Cannot save the comment: " + textStatus);
-	           // $("#result").html('There is error while submit');
-	        }
 		});
 	});
 });
+
+function prependComment(id) {
+	$.ajax({
+		type: "get",
+		url: "default.jsp?command=Comment&id="+id,
+		dataType: "json",
+		success: function(comment) {
+			var item = "<li><h3>" + comment.author + "</h3>" + comment.text + "</li>";
+			$("#comments_list").prepend(item);
+		},
+	});
+}
