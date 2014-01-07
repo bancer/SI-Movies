@@ -307,6 +307,7 @@ public abstract class AbstractMapper {
 				loadedMap.remove(obj.getId());
 			}
 			// doAfterDelete();
+			System.out.println(statement);
 			return statement.executeUpdate();
 		} catch (SQLException e) {
 			throw new ApplicationException(e);

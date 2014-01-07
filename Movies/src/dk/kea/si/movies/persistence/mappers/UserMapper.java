@@ -35,10 +35,12 @@ public class UserMapper extends AbstractMapper {
 
 	private static final String BLOCKED_UNTIL = "User.blocked_until";
 	
+	private static final String ROLE = "User.role";
+	
 	public static final String COLUMNS = ID + ", " + ADDRESS + ", " + EMAIL
 			+ ", " + FIRST_NAME + ", " + LAST_NAME + ", " + DISPLAY_NAME + ", "
 			+ PHONE + ", " + USERNAME + ", " + PASSWORD + ", " + SALT + ", "
-			+ BLOCKED_UNTIL;
+			+ BLOCKED_UNTIL + ", " + ROLE;
 
 	protected String findStatement() {
 		return "SELECT " + COLUMNS + " FROM User AS User" +
@@ -129,6 +131,7 @@ public class UserMapper extends AbstractMapper {
 		user.setPassword(rs.getString(PASSWORD));
 		user.setSalt(rs.getString(SALT));
 		user.setBlockedUntil(rs.getTimestamp(BLOCKED_UNTIL));
+		user.setRole(User.Role.valueOf(rs.getString(ROLE)));
 		return user;
 	}
 

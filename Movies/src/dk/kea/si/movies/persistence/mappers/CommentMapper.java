@@ -71,8 +71,7 @@ public class CommentMapper extends AbstractMapper {
 
 	@Override
 	protected String deleteStatement() {
-		// TODO Auto-generated method stub
-		return null;
+		return "DELETE FROM Comment WHERE id=?;";
 	}
 
 	@Override
@@ -121,8 +120,8 @@ public class CommentMapper extends AbstractMapper {
 	@Override
 	protected void doDelete(DomainObject o, PreparedStatement s)
 			throws SQLException {
-		// TODO Auto-generated method stub
-
+		Comment comment = (Comment) o;
+		s.setLong(1, comment.getId());
 	}
 
 	@Override

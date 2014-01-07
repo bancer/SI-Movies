@@ -1,6 +1,10 @@
 package dk.kea.si.movies.commands;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -9,7 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import dk.kea.si.movies.components.Auth;
+import dk.kea.si.movies.components.Auth.Action;
 import dk.kea.si.movies.domain.User;
+import dk.kea.si.movies.domain.User.Role;
 import dk.kea.si.movies.persistence.core.PersistenceFacade;
 import dk.kea.si.movies.util.AppUtils;
 import dk.kea.si.movies.util.ApplicationException;
@@ -114,5 +121,12 @@ public abstract class FrontCommand {
 		if(!isAuthenticatedUser()) {
 			throw new ApplicationException(ApplicationException.AUTH_EXCEPTION);
 		}
+	}
+	
+
+	
+	protected boolean isAuthorized(Action action) {
+		User user = (User) request.getSession().getAttribute(Constants.SESSION_USER_KEY);	
+		return Auth.isAuthorized(action, user.getRole());
 	}
 }

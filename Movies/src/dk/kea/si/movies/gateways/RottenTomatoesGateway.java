@@ -2,9 +2,11 @@ package dk.kea.si.movies.gateways;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Scanner;
 
 import com.google.gson.Gson;
@@ -137,8 +139,10 @@ public class RottenTomatoesGateway {
 
 	private static String readUrlContents(String url) throws IOException,
 			MalformedURLException {
-		Scanner scanner = new Scanner(new BufferedReader(new InputStreamReader(
-				new URL(url).openStream())));
+		InputStream inputStream = new URL(url).openStream();
+		Charset charset = Charset.forName("ISO-8859-1");
+		InputStreamReader input = new InputStreamReader(inputStream, charset);
+		Scanner scanner = new Scanner(new BufferedReader(input));
 		String content = "";
 		while (scanner.hasNextLine()) {
 			content += scanner.nextLine();

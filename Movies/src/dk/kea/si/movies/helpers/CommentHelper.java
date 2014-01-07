@@ -83,4 +83,12 @@ public class CommentHelper extends AHelper {
 	public void setUser(User user) {
 		comment.setUser(user);
 	}
+
+	public String getId() {
+		if(comment.getId() > 0) {
+			return "" + comment.getId();
+		} else {
+			return "";
+		}
+	}
 }

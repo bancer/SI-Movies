@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<%@page import="dk.kea.si.movies.domain.User.Role"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <jsp:useBean id="movie" scope="request"
@@ -94,17 +95,28 @@
 			<div>
 				<h4 class="toggleable">Comments</h4>
 				<div class="hidden_on_load">
-					<% if(commentsHelper.size() > 0) { %>
-						<ul id="comments_list">
-							<% for(int i = 0; i < commentsHelper.size(); i++) { %>
-								<li>
-									<h3><%= commentsHelper.getAuthorDisplayName(i) %></h3>
-									<%= commentsHelper.getCommentText(i) %>
-								</li>
-							<% } %>
-						</ul>
-					<% } %>
-					<% if(session.getAttribute(Constants.SESSION_USER_KEY) != null) { %>
+					<% User user = (User) session.getAttribute(Constants.SESSION_USER_KEY); %>	
+					<ul id="comments_list">
+						<% for(int i = 0; i < commentsHelper.size(); i++) { %>
+							<li>
+								<h3><%= commentsHelper.getAuthorDisplayName(i) %></h3>
+								<%= commentsHelper.getCommentText(i) %>
+								<% if(user != null && (user.getRole() == Role.ADMIN || user.getRole() == Role.EDITOR)) { %>
+									<p>
+										<form name="delete_comment">
+											<input type="hidden" name="command" value="DeleteComment" />
+											<input type="hidden" 
+												name="<%=Constants.SESSION_CSRF_KEY %>" 
+												value="<%=session.getAttribute(Constants.SESSION_CSRF_KEY) %>" />
+											<input type="hidden" name="comment_id" value="<%=commentsHelper.getCommentId(i) %>" />
+											<input type="submit" name="delete_comment" value="Delete" />
+										</form>
+									</p>
+								<% } %>
+							</li>
+						<% } %>
+					</ul>
+					<% if(user != null) { %>
 					<form id="comment_form">
 						<input type="hidden" name="command" value="Comment" />
 						<input type="hidden" 

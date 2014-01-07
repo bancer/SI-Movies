@@ -37,4 +37,9 @@ public class CommentsListHelper extends AHelper {
 		commentHelper.setComment(comments.get(index));
 		return commentHelper.getAuthorDisplayName();
 	}
+	
+	public String getCommentId(int index) {
+		commentHelper.setComment(comments.get(index));
+		return commentHelper.getId();
+	}
 }

@@ -6,6 +6,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class User extends DomainObject {
+	
+	public static enum Role {
+		ADMIN, EDITOR, AUTHOR
+	}
 
 	private static final int MAX_OPEN_IDS = 6;
 
@@ -30,6 +34,8 @@ public class User extends DomainObject {
 	private ArrayList<OpenID> openIds;
 	
 	private Timestamp blockedUntil;
+	
+	private Role role;
 
 	public User() {
 
@@ -204,5 +210,13 @@ public class User extends DomainObject {
 
 	public void setBlockedUntil(Timestamp blockedUntil) {
 		this.blockedUntil = blockedUntil;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 }
