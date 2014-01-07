@@ -18,6 +18,7 @@ public class Auth {
 	 * those actions.
 	 */
 	private static final HashMap<Action, List<Role>> accessList;
+	
 	static {
 		accessList = new HashMap<Action, List<Role>>();
 		List<Role> adminAndEditor = Arrays.asList(new Role[] {

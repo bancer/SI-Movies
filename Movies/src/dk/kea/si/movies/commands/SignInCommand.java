@@ -53,15 +53,21 @@ public class SignInCommand extends FrontCommand {
 	
 	private User parseUserData(JSONObject obj) {
 		JSONObject profile = (JSONObject) obj.get("profile");
+		
 		OpenID openId = new OpenID();
 		openId.setIdentifier((String) profile.get("identifier"));
 		openId.setProvider((String) profile.get("providerName"));
+		
 		User user = new User();
 		user.addOpenId(openId);
 		user.setDisplayName((String) profile.get("displayName"));
 		user.setEmail((String) profile.get("email"));
 		user.setPhone((String) profile.get("phoneNumber"));
-		user.setAddress((String) profile.get("address"));
+		
+		JSONObject address = (JSONObject) profile.get("address");
+		user.setAddress((String) address.get("country"));
+		//TODO: ensure that any open id provider delivers address as a JSON object and not as a string
+		
 		JSONObject name = (JSONObject) profile.get("name");
 		user.setFirstName((String) name.get("givenName"));
 		user.setLastName((String) name.get("familyName"));
