@@ -246,6 +246,7 @@ CREATE TABLE IF NOT EXISTS `movies`.`User` (
   `password` CHAR(64) NULL,
   `salt` CHAR(64) NULL,
   `blocked_until` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `role` ENUM('ADMIN','EDITOR','AUTHOR') NOT NULL DEFAULT 'AUTHOR',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `idx_display_name` (`display_name` ASC),
   UNIQUE INDEX `idx_username` (`username` ASC),
