@@ -78,7 +78,7 @@
 					<div>
 						<h3><%=googleVideos.get(i).getTitle()%></h3>
 						<iframe width="640" height="390"
-							src="http://www.youtube.com/embed/<%= googleVideos.get(i).getId() %>?autoplay=0"
+							src="//www.youtube.com/embed/<%= googleVideos.get(i).getId() %>?autoplay=0"
 							frameborder="1" allowfullscreen></iframe>
 					</div>
 					<% } %>
