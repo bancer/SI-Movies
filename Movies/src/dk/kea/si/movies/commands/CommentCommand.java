@@ -26,9 +26,11 @@ public class CommentCommand extends FrontCommand {
 		}
 		Comment comment = (Comment) getStorage().find(Long.parseLong(id),
 				Comment.class);
+		CommentHelper helper = new CommentHelper();
+		helper.setComment(comment);
 		String format = "{\"author\":\"%s\", \"text\":\"%s\"}";
-		String json = String.format(format, comment.getUser()
-				.getDisplayName(), comment.getComment());
+		String json = String.format(format, helper.getAuthorDisplayName(),
+				helper.getCommentText());
 		out.println(json);
 		out.flush();
 	}
@@ -44,12 +46,9 @@ public class CommentCommand extends FrontCommand {
 		CommentHelper helper = initHelper();
 		
 		if(hasValidCSRFToken()) {
-			//System.out.println("csrf valid");
 			if(helper.getErrors().isEmpty()) {
-				//boolean id = getStorage().save(helper.getComment());
 				long id = getStorage().insert(helper.getComment());
 				out.print(id);
-				//out.println(new Gson().toJson(helper.getComment()));
 			} else {
 				out.println(new JSONObject(helper.getErrors()));
 			}

@@ -89,10 +89,8 @@ public class CommentMapper extends AbstractMapper {
 		if (resultSetContainsColumn(rs, UserMapper.ID)) {
 			User user = (User) getMapper(User.class).doLoad(
 					rs.getLong(UserMapper.ID), rs);
-			System.out.println(user);
 			comment.setUser(user);
 		}
-		//System.out.println(comment.getUser());
 		return comment;
 	}
 

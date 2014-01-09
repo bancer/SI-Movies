@@ -101,6 +101,7 @@
 							<li>
 								<h3><%= commentsHelper.getAuthorDisplayName(i) %></h3>
 								<%= commentsHelper.getCommentText(i) %>
+								<a href="#">Reply</a>
 								<% if(user != null && (user.getRole() == Role.ADMIN || user.getRole() == Role.EDITOR)) { %>
 									<p>
 										<form name="delete_comment">

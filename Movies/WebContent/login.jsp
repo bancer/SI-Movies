@@ -36,7 +36,8 @@
 						<% } %>
 						<li>
 							<label for="username">Username:</label>
-							<input type="text" name="username" id="username" value="<%=helper.getUsername()%>" />
+							<input type="text" name="username" id="username" 
+									value="<%=helper.getUsername()%>" />
 							<span class='validation_error'>
 								<%=helper.getError("username")%>
 							</span>
