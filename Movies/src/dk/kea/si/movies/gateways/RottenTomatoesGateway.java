@@ -120,7 +120,6 @@ public class RottenTomatoesGateway {
 		String content = readUrlContents(url);
 		Gson gson = new Gson();
 		return gson.fromJson(content, Reviews.class);
-		//return gson.fromJson(new InputStreamReader(new URL(url).openStream()), Reviews.class);
 	}
 	
 	public static Clips findClips(String apiKey, String movieId)
@@ -145,7 +144,7 @@ public class RottenTomatoesGateway {
 		URLConnection urlConnection = u.openConnection();
 		String contentEncoding = urlConnection.getContentEncoding();
 		InputStream inputStream;
-		if(contentEncoding != null && contentEncoding.contains("gzip")) {
+		if (contentEncoding != null && contentEncoding.contains("gzip")) {
 			inputStream = new GZIPInputStream(urlConnection.getInputStream());
 		} else {
 			inputStream = urlConnection.getInputStream();
@@ -154,7 +153,7 @@ public class RottenTomatoesGateway {
 		ByteArrayBuffer baf = new ByteArrayBuffer(1024);
 		byte[] buffer = new byte[1024];
 		int sizeRead = bis.read(buffer);
-		while(sizeRead > -1) {
+		while (sizeRead > -1) {
 			baf.append(buffer, 0, sizeRead);
 			sizeRead = bis.read(buffer);
 		}
