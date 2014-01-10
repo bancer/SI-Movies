@@ -33,7 +33,9 @@ public class RegisterCommand extends FrontCommand {
 					helper.getErrors().put("email", message);
 				} else if(getStorage().save(user)) {
 					startSession(user);
-					response.sendRedirect("?command=User");
+					//response.sendRedirect("?command=User");
+					//redirect to home page
+					response.sendRedirect(request.getContextPath());
 					return;
 				} else {
 					request.setAttribute("error.message", "Cannot register. Try again later.");
