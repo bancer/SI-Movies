@@ -5,8 +5,14 @@
 			window.janrain = {};
 		if (typeof window.janrain.settings !== 'object')
 			window.janrain.settings = {};
-
-		janrain.settings.tokenUrl = '<%= getServletContext().getInitParameter("auth-url") %>';
+		
+		<% String signInURL = request.getScheme() 
+				+ "://" + request.getServerName() 
+				+ ":" + request.getServerPort() 
+				+ request.getContextPath() 
+				+ getServletContext().getInitParameter("auth-url"); %>
+				
+		janrain.settings.tokenUrl = '<%= signInURL %>';
 
 		function isReady() {
 			janrain.ready = true;
